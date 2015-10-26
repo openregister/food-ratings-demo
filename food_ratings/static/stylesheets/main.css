@@ -1,0 +1,176 @@
+body {
+  font: helvetica neue, arial;
+  background-color: none;
+  line-height: 1.5;
+  font-weight: 400;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.heading-medium {
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.heading-small {
+  font-size: 19px;
+  line-height: 1.3157894737;
+  font-weight: 700;
+  text-transform: none;
+}
+
+
+#map-canvas {
+  width: 100%;
+  height: 300px;
+}
+
+#top-bar-wrapper {
+  background-color: #2D7E3F;
+  height: 90px
+}
+
+.top-bar {
+  background-color: inherit;
+}
+
+#logo-wrapper {
+  margin: 0 auto;
+  max-width: 62.5rem;
+  width: 100%;
+  padding: 15px;
+}
+
+header {
+  margin: 50px 0;
+}
+
+p#count,
+div#loading p {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}
+
+fieldset.filters {
+  border: 2px solid #DDD;
+  margin: 0 25px 10px 0;
+  padding: 1rem !important;
+}
+
+footer ul,
+footer li {
+  list-style: none;
+}
+
+.previous-next-navigation li.previous a {
+  padding: 15px 0 15px 35px;
+}
+
+footer {
+  margin: 50px 0px;
+}
+
+footer p,
+footer li,
+footer a {
+  font-size: 0.9rem;
+}
+
+footer p {
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+ul.accordion {
+  margin: 0;
+}
+
+.accordion .accordion-navigation > a {
+  padding: 0;
+  background: inherit;
+  display: block;
+  font-size: inherit;
+  color: #008CBA !important;
+}
+
+.accordion .accordion-navigation > a:hover {
+  background: inherit;
+}
+
+.accordion .accordion-navigation ul,
+.accordion .accordion-navigation li {
+  list-style: none;
+}
+
+.accordion .accordion-navigation.active > a {
+  background: inherit;
+}
+
+.more {
+  padding-top: 12px;
+}
+
+.more a {
+  font-weight: bold;
+}
+
+hr {
+  margin: 30px 30px 40px 15px;
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.form-hint {
+  font-size: 0.9rem;
+  font-weight: 400;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.fsa-button {
+  background-color: #2D7E3F;
+  top: 52px;
+  font-weight: bold;
+  font-size: 0.9rem !important;
+  padding-top: 9px;
+  padding-bottom: 10px;
+}
+
+.fsa-button:hover {
+  background-color: #3AA452;
+}
+
+#counties-list li {
+    list-style: none;
+    border-bottom: solid 1px #DDDDDD;
+    line-height: 2.75rem;
+    margin-right: 10px;
+}
+
+@media only screen and (min-width: 40.063em) and (max-width: 64em)  {
+  fieldset.filters {
+    margin: 1.125rem 0;
+  }
+
+  .fsa-button {
+    top: 0px;
+  }
+}
+
+@media only screen and (max-width: 40em) {
+  fieldset.filters {
+    margin: 1.125rem 0;
+  }
+
+  .fsa-button {
+    top: 0px;
+  }
+
+}

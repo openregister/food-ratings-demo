@@ -1,0 +1,20 @@
+{
+  "name": "fsa_approved_premises",
+  "version": "0.0.0",
+  "license": "MIT LICENSE",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "fsa_approved_premises/static/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "foundation": "zurb/bower-foundation#~5.5"
+  },
+  "homepage": "http://github.com/openregister/fsa-approved-premises",
+  "authors": [
+    "Adam Shimali <adam.shimali@digital.cabinet-office.gov.uk>"
+  ]
+}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <header>
+    <div class="row">
+      <div class="large-8 columns">
+        <h1>Food hygiene ratings</h1>
+         <p>Check the food hygiene standards of a restaurant, takeaway or food shop.</p>
+      </div>
+      <div class="large-4 columns more">
+        <p><a href="#">Find out more about more about the food ratings scheme</a></p>
+      </div>
+    </div>
+  </header>
+  <main id="content" role="main">
+
+    <div class="row">
+       <div class="large-6 columns">
+        <h3>Find a rating</h3>
+        <p>Search using a business name, an ID number or by area. The ID number can be found on the sticker displayed in the food premises.</p>
+      </div>
+    </div>
+
+    <div class="row search">
+      <form>
+        <div class="large-5 columns">
+          <label class="form-label" for="name-or-id">Business name or ID number
+            <span class="form-hint">For example, Kebab world or FHR1234</span>
+          </label>
+          <input type="text" id="name-or-id" placeholder="Business name or ID number" />
+        </div>
+        <div class="large-5 columns">
+          <label class="form-label" for="area-or-postcode">Area or postcode
+            <span class="form-hint">For example, SW4 or Croydon</span>
+          </label>
+          <input type="text"  id="area-or-postcode"  placeholder="Area or postcode" />
+        </div>
+        <div class="large-2 columns">
+          <input type="submit" value="Find ratings"  class="button tiny fsa-button"/>
+        </div>
+      </form>
+    </div>
+
+    <div class="row">
+      <hr>
+      <div class="large-4 columns">
+        <h3>Browse by local authority area</h3>
+      </div>
+      <div class="large-8 columns">
+        <ul id="counties-list">
+          <li>East Counties</li>
+          <li>East Midlands</li>
+          <li>London</li>
+          <li>North East</li>
+          <li>North West</li>
+          <li>South East</li>
+          <li>South West</li>
+          <li>West Midlands</li>
+          <li>Yorkshire and Humberside</li>
+          <li>Northern Ireland</li>
+          <li>Scotland</li>
+          <li>Wales</li>
+        </ul>
+      </div>
+    </div>
+
+  </main>
+
+  {% include "footer.html" %}
+{% endblock %}

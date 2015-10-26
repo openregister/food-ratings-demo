@@ -1,0 +1,7 @@
+Flask
+Flask-WTF
+WTForms
+gunicorn
+requests
+redis
+requests-cache
