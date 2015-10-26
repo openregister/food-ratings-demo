@@ -1,5 +1,5 @@
 ===============================
-fsa_approved_premises
+food_ratings_demo
 ===============================
 
 
@@ -17,16 +17,18 @@ Install python requirements.
 pip install -r requirements/dev.txt
 ```
 
-Set some environment variables. The following is required. Add as needed.
+Set some environment variables are already set in environment.sh e.g.
 
 ```
 export SETTINGS='config.DevelopmentConfig'
 ```
 
+If you need more add to the environment.sh file.
+
 Once that this all done you can:
 
 ```
-python manage.py server
+./run.sh
 ```
 
 Deployment
