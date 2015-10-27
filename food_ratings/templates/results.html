@@ -55,14 +55,14 @@
 
             <div class="large-2 columns">
               <div class="filters">
-                The filters panel
+                <p>Filter results by</p>
               </div>
             </div>
 
             <div class="large-10 columns">
               <ul>
                 {% for result in results %}
-                  <li>{{result}}</li>
+                  <li>{{result.name}}</li>
                 {% endfor %}
               </ul>
             </div>
