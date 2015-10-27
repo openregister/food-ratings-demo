@@ -2,23 +2,11 @@
 
 {% block content %}
 
-  <header>
-    <div class="row">
-      <div class="large-8 columns">
-        <h1>Food hygiene ratings</h1>
-         <p>Check the food hygiene standards of a restaurant, takeaway or food shop.</p>
-      </div>
-      <div class="large-4 columns more">
-        <p><a href="#">Find out more about more about the food ratings scheme</a></p>
-      </div>
-    </div>
-  </header>
   <main id="content" role="main">
 
-    <div class="row">
-       <div class="large-6 columns">
-        <h3>Find a rating</h3>
-        <p>Search using a business name, an ID number or by area. The ID number can be found on the sticker displayed in the food premises.</p>
+    <div class="row back">
+      <div class="large-1 columns">
+      <a href="/">Back</a>
       </div>
     </div>
 
@@ -54,25 +42,46 @@
     </div>
 
     <div class="row">
-      <hr>
-      <div class="large-4 columns">
-        <h3>Browse by local authority area</h3>
-      </div>
-      <div class="large-8 columns">
-        <ul id="counties-list">
-          <li>East Counties</li>
-          <li>East Midlands</li>
-          <li>London</li>
-          <li>North East</li>
-          <li>North West</li>
-          <li>South East</li>
-          <li>South West</li>
-          <li>West Midlands</li>
-          <li>Yorkshire and Humberside</li>
-          <li>Northern Ireland</li>
-          <li>Scotland</li>
-          <li>Wales</li>
+      <div class="large-12 columns">
+
+        <ul class="tabs result-tabs" data-tab>
+          <li class="tab-title active"><a href="#list" class="wide">List view</a></li>
+          <li class="tab-title"><a href="#map" class="wide">Map view</a></li>
         </ul>
+
+        <div class="tabs-content">
+
+          <div class="content active" id="list">
+
+            <div class="large-2 columns">
+              <div class="filters">
+                The filters panel
+              </div>
+            </div>
+
+            <div class="large-10 columns">
+              <ul>
+                {% for result in results %}
+                  <li>{{result}}</li>
+                {% endfor %}
+              </ul>
+            </div>
+
+          </div>
+
+          <div class="content" id="map">
+            <div class="large-2 columns">
+              <div class="filters">
+                The filters panel
+              </div>
+            </div>
+
+            <div class="large-10 columns">
+              the map goes here
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 

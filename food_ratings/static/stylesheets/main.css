@@ -119,7 +119,7 @@ ul.accordion {
 }
 
 hr {
-  margin: 30px 30px 40px 15px;
+  margin: 5px 30px 40px 15px;
 }
 
 .form-label {
@@ -152,6 +152,40 @@ hr {
     border-bottom: solid 1px #DDDDDD;
     line-height: 2.75rem;
     margin-right: 10px;
+}
+
+.result-tabs {
+  border-bottom: 1px solid #dddddd;
+}
+
+.tab-title a.wide {
+  margin-right: 5px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 40px;
+  padding-right: 225px;
+  border: 1px solid #dddddd;
+}
+
+.tabs dd, .tabs .tab-title {
+    margin-bottom: -1px !important;
+}
+
+.tab-title.active a {
+  border-bottom-color: transparent;
+}
+
+.search {
+  margin-bottom: 25px;
+}
+
+.back {
+  margin-top: 20px;
+  margin-bottom: 25px;
+}
+
+.back a {
+  text-decoration: underline;
 }
 
 @media only screen and (min-width: 40.063em) and (max-width: 64em)  {

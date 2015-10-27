@@ -1,12 +1,37 @@
-
 from flask import (
     render_template,
-    Blueprint
+    Blueprint,
+    flash,
+    abort,
+    current_app,
+    request,
+    redirect,
+    url_for
 )
+
+from food_ratings.frontend.forms import SearchForm
 
 frontend = Blueprint('frontend', __name__, template_folder='templates')
 
-@frontend.route("/")
-def index():
-    return render_template('index.html')
 
+@frontend.route('/',  methods=['GET', 'POST'])
+def index():
+    form = SearchForm()
+    if form.validate_on_submit():
+        business = form.data.get('business', '').strip().lower()
+        location = form.data.get('location', '').strip().lower()
+        try:
+            return redirect(url_for('.search', business=business, location=location))
+        except Exception as e:
+            message = 'There was a problem searching for: %s' % business
+            flash(message)
+            abort(500)
+    return render_template('index.html', form=form)
+
+
+@frontend.route('/search')
+def search():
+    # find the item
+    form = SearchForm(business=request.args['business'], location=request.args['location'])
+    results = [{'name': 'Byron Hamburgers', 'premises': '1a St Giles High Street, WC2H 8AG', 'inspection_date': '27 August 2015', 'rating': '1 – Major improvement needed'}, {'name': 'Byron Hamburgers', 'premises': '6 Rathbone Place, London, W1T 1HL', 'inspection_date': '1 December 2014', 'rating': '4 – Good'}, {'name': 'Byron Hamburgers', 'premises': '6 Store Street, London, WC1E 7DQ', 'inspection_date': '22 July 2012', 'rating': '5 – Very good'}]
+    return render_template('results.html', form=form, results=results)
