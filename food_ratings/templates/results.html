@@ -50,10 +50,7 @@
         </ul>
 
         <div class="tabs-content">
-
           <div class="content active" id="list">
-
-
               <div class="large-4 columns">
                 <div class="filters">
                   <p>Filter results by</p>
@@ -72,14 +69,12 @@
                 <ul class="result-list">
                   {% for result in results %}
                     <li>
-                      <a href="#" class="business">{{result.name}}</a>
+                      <a href="/rating/FHR46250" class="business">{{result.name}}</a>
                       <p><span>Premises: {{result.premises}}</span> <span>Last inspection: {{result.inspection_date}}</span> <span>Rating: {{result.rating}}</span></p>
                     </li>
                   {% endfor %}
                 </ul>
               </div>
-
-
           </div>
 
           <div class="content" id="map">

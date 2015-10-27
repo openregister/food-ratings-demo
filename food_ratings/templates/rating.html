@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <main id="content" role="main">
+
+    <div class="row back">
+      <div class="large-1 columns">
+      <a href="/">Back</a>
+      </div>
+    </div>
+
+    <div class="row rating-header">
+      <div class="large-12 columns">
+        <h1><span class="business">{{rating.name}}</span><span class="rating-id"> - {{fhrs_id}}</span></h1>
+      </div>
+    </div>
+
+    <div class="row" class="rating-header">
+      <div class="large-4 columns">
+        <p><img src="{{ asset_path }}images/ratings/rating-1.png"/ class="rating"></p>
+      </div>
+      <div class="large-8 columns">
+        <h3>Premises details</h3>
+        <p>{{rating.premises}}</p>
+        <h5>Premises number: 10167349</h5>
+        <h4>Local authority</h4>
+        <img src="/static/images/camden-logo-black.png" class="local-authority-logo">
+        <div id="map-canvas">
+          <img src="http://placehold.it/500x250">
+        </div>
+      </div>
+    </div>
+    <div class="row" class="inspection-details">
+      <div class="large-8 columns large-offset-4">
+        <h3>Inspection details</h3>
+        <h4>Date of last inspection</h4>
+        <p>{{rating.inspection_date}} <a href="#">View inspection history</a></p>
+        <h4>Inspected by</h4>
+        <p>Camden Council</p>
+        <h4>Rating breakdown:</h4>
+        <ul>
+          <li>Hygienic food handling
+          Hygienic handling of food including preparation, cooking,
+          re-heating, cooling and storage
+          Result: Improvement necessary
+          </li>
+          <li>
+          Cleanliness and condition of facilities and building
+          Cleanliness and condition of facilities and building (including
+          having appropriate layout, ventilation, hand washing facilities
+          and pest control) to enable good food hygiene
+          Result: Major improvement necessary
+          </li>
+          <li>Management of food safety
+          System or checks in place to ensure that food sold or served is
+          safe to eat, evidence that staff know about food safety, and the
+          food safety officer has confidence that standards will be
+          maintained in future.
+          Result: Major improvement necessary
+          </li>
+        </ul>
+        <h5>What the business says</h5>
+        <div class="response">
+          <p>“I agree with the inspection results but have since carried out the
+          following improvements:</p>
+
+          <p>The staff have been trained/retrained/given instruction/are under
+          revised supervisory arrangements</p>
+
+          <p>The points raised by the Environmental Health Officers were acted
+          upon immediately and we look forward to welcoming them back for
+          a re-inspection when we will be delighted to demonstrate our high
+          standards at this restaurant.</p>
+
+          <p>The conditions found at the time of the inspection were not typical
+          of the normal conditions mainained at the establishment and arose
+          because: Historically, cooking temperature records were available.
+          However, on the day of the inspection this was not the case.”</p>
+        </div>
+
+        <h5>Company details</h5>
+
+        <div class="row" class="company-details">
+          <div class="large-4 columns">
+            <p>Company name:</p>
+            <p>Company number:</p>
+            <p>Head office:</p>
+          </div>
+          <div class="large-4 columns end">
+            <p>BYRON HAMBURGERS LIMITED</p>
+            <p>07228130</p>
+            <p>1st Floor 14-15, Berners Street, London</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  {% include "footer.html" %}
+{% endblock %}
