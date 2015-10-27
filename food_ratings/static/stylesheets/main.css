@@ -175,6 +175,25 @@ hr {
   border-bottom-color: transparent;
 }
 
+.result-list {
+  list-style: none;
+  margin-left: 0;
+}
+
+.result-list li {
+  border-bottom: 1px solid #dddddd;
+  margin-bottom: 15px;
+}
+
+.result-list li span {
+  margin-right: 15px;
+}
+
+
+a.business {
+  font-weight: bold;
+}
+
 .search {
   margin-bottom: 25px;
 }

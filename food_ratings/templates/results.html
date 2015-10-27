@@ -53,19 +53,32 @@
 
           <div class="content active" id="list">
 
-            <div class="large-2 columns">
-              <div class="filters">
-                <p>Filter results by</p>
-              </div>
-            </div>
 
-            <div class="large-10 columns">
-              <ul>
-                {% for result in results %}
-                  <li>{{result.name}}</li>
-                {% endfor %}
-              </ul>
-            </div>
+              <div class="large-4 columns">
+                <div class="filters">
+                  <p>Filter results by</p>
+                </div>
+              </div>
+              <div class="large-8 columns">
+                <p>{{results|count}} result{% if results|count > 1 %}s{% endif %} for {{request.args.business}}</p>
+              </div>
+
+              <div class="large-4 columns">
+                <div class="filters">
+                  <p>The actual filters</p>
+                </div>
+              </div>
+              <div class="large-8 columns">
+                <ul class="result-list">
+                  {% for result in results %}
+                    <li>
+                      <a href="#" class="business">{{result.name}}</a>
+                      <p><span>Premises: {{result.premises}}</span> <span>Last inspection: {{result.inspection_date}}</span> <span>Rating: {{result.rating}}</span></p>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+
 
           </div>
 
