@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block head_end %}
+  <script src="https://maps.googleapis.com/maps/api/js"></script>
+{% endblock %}
+
 {% block content %}
 
   <main id="content" role="main">
@@ -20,20 +24,18 @@
       <div class="large-4 columns">
         <p><img src="{{ asset_path }}images/ratings/rating-1.png"/></p>
       </div>
-      <div class="large-8 columns">
+      <div class="large-7 columns end">
         <h2 class="heading-medium">Premises details</h2>
         <p>{{rating.premises}}</p>
         <p>Premises number: 10167349</p>
         <h2 class="heading-medium">Local authority</h2>
         <img src="/static/images/camden-logo-black.png" class="local-authority-logo">
-        <div id="map-canvas">
-          <img src="http://placehold.it/500x250">
-        </div>
+        <div id="map-canvas"></div>
       </div>
     </div>
 
     <div class="row" class="inspection-details">
-      <div class="large-8 columns large-offset-4">
+      <div class="large-7 columns large-offset-4">
         <h2 class="heading-medium">Inspection details</h2>
         <h2 class="heading-small">Date of last inspection</h2>
         <p>{{rating.inspection_date}} <a href="#">View inspection history</a></p>
