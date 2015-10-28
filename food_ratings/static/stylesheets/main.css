@@ -163,6 +163,10 @@ hr {
   border-bottom: 1px solid #dddddd;
 }
 
+.tab-title a {
+  color: #008CBA !important;
+}
+
 .tab-title a.wide {
   margin-right: 5px;
   padding-top: 10px;
@@ -207,6 +211,13 @@ hr {
   text-decoration: underline;
 }
 
+.back i {
+  margin-right: 5px;
+  font-size: 1.6rem;
+  vertical-align: bottom;
+}
+
+
 .rating-header {
   margin-bottom: 35px;
 }
@@ -242,6 +253,18 @@ img.local-authority-logo {
 
 .company-details td {
   background-color: #fff;
+}
+
+.map {
+  background-image: url(/static/images/map-icon.png);
+  background-repeat: no-repeat;
+  background-position: 5px 8px;
+}
+
+.list {
+  background-image: url(/static/images/list-icon.png);
+  background-repeat: no-repeat;
+  background-position: 5px 8px;
 }
 
 @media only screen and (min-width: 40.063em) and (max-width: 64em)  {

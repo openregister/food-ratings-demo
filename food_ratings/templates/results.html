@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 
+{% block head_end %}
+  <script src="https://maps.googleapis.com/maps/api/js"></script>
+{% endblock %}
+
 {% block content %}
 
   <main id="content" role="main">
 
     <div class="row back">
       <div class="large-1 columns">
-      <a href="/">Back</a>
+      <p><a href="/"><i class="fa fa-caret-left fa-4"></i>Back</a></p>
       </div>
     </div>
 
@@ -45,8 +49,8 @@
       <div class="large-12 columns">
 
         <ul class="tabs result-tabs" data-tab>
-          <li class="tab-title active"><a href="#list" class="wide">List view</a></li>
-          <li class="tab-title"><a href="#map" class="wide">Map view</a></li>
+          <li class="tab-title active"><a href="#list" class="wide list">List view</a></li>
+          <li class="tab-title"><a href="#map" class="wide map">Map view</a></li>
         </ul>
 
         <div class="tabs-content">
@@ -85,7 +89,7 @@
             </div>
 
             <div class="large-10 columns">
-              the map goes here
+              <div id="map-canvas"></div>
             </div>
           </div>
         </div>
