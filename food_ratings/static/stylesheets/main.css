@@ -62,6 +62,19 @@ fieldset.filters {
   padding: 1rem !important;
 }
 
+.list-view  p {
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.filters h2 {
+  margin-bottom: 20px;
+}
+
+.filters label {
+  font-weight: bold;
+}
+
 footer ul,
 footer li {
   list-style: none;

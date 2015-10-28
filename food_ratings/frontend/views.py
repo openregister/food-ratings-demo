@@ -9,6 +9,8 @@ from flask import (
     url_for
 )
 
+import requests
+
 from food_ratings.frontend.forms import SearchForm
 
 frontend = Blueprint('frontend', __name__, template_folder='templates')
@@ -40,4 +42,12 @@ def search():
 @frontend.route('/rating/<fhrs_id>')
 def rating(fhrs_id):
     rating = {'name': 'Byron Hamburgers', 'premises': '1a St Giles High Street, WC2H 8AG', 'inspection_date': '27 August 2015'}
-    return render_template('rating.html', rating=rating, fhrs_id=fhrs_id)
+
+    # get lat long from postcode
+    postcode_register = current_app.config['POSTCODE_REGISTER']
+    url = '%s/postcode/%s' % (postcode_register, 'WC2H%208AG.json')
+    resp = requests.get(url)
+    data = resp.json()
+    latitude = data['entry']['latitude']
+    longitude = data['entry']['longitude']
+    return render_template('rating.html', rating=rating, fhrs_id=fhrs_id, latitude=latitude, longitude=longitude)
