@@ -40,10 +40,23 @@ def search():
     return render_template('results.html', form=form, results=results)
 
 
+# dummy API
+@frontend.route('/premises.openregister.org/-premises/<premises>')
+def premises_register(premises):
+    # need to add a UPRN for this ..
+    return jsonify({'premises':'15662079000/15895190000','address':'5167078'})
+
+@frontend.route('/food-premises.openregister.org/food-premises/<food_premises>')
+def food_premises_register(food_premises):
+    return jsonify({'food-premises':'759332','name':'Byron','business':'company:07228130','premises':'15662079000/15895190000','food-premises-type':'Restaurant/Cafe/Canteen'})
+
 @frontend.route('/company.openregister.org/company/<company>')
 def company_register(company):
     return jsonify({'company':'07228130','name': 'BYRON HAMBURGERS LIMITED','address':'10033530330','industry':'56101','start-date':'2010-04-20'})
 
+@frontend.route('/food-premises-rating.openregister.org/food-premises-rating/759332-2015-08-27')
+def food_premises_rating_register(food_premises_rating):
+    return jsonify({"food-premises-rating":"759332-2015-08-27","food-premises":"759332","food-premises-rating-value":"1","food-premises-rating-hygiene-score":"15","food-premises-rating-structural-score":"15","food-premises-rating-confidence-in-management-score":"20","local-authority":"00AG","food-premises-rating-reply":"I agree with the inspection results but have since carried out the following improvements:\n There is a new manager and/or new staff. The staff have been trained/retrained/given instruction/are under revised supervisory arrangements. The points raised by the Environmental Health Officers were acted upon immediately and we look forward to welcoming them back for a re-inspection when we will be delighted to demonstrate our high standards at this restaurant. The conditions found at the time of the inspection were not typical of the normal conditions maintained at the establishment and arose because: Historically, cooking temperature records were available. However, on the day of the inspection this was not the case.","start-date":"2015-08-27"})
 
 @frontend.route('/rating/<fhrs_id>')
 def rating(fhrs_id):
