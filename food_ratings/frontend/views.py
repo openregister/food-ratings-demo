@@ -6,7 +6,8 @@ from flask import (
     current_app,
     request,
     redirect,
-    url_for
+    url_for,
+    jsonify
 )
 
 import requests
@@ -39,11 +40,16 @@ def search():
     return render_template('results.html', form=form, results=results)
 
 
+@frontend.route('/company.openregister.org/company/<company>')
+def company_register(company):
+    return jsonify({'company':'07228130','name': 'BYRON HAMBURGERS LIMITED','address':'10033530330','industry':'56101','start-date':'2010-04-20'})
+
+
 @frontend.route('/rating/<fhrs_id>')
 def rating(fhrs_id):
     rating = {'name': 'Byron Hamburgers', 'premises': '1a St Giles High Street, WC2H 8AG', 'inspection_date': '27 August 2015'}
 
-    # get lat long from postcode of rating. for moment hard coded
+    # get lat long from postcode
     postcode_register = current_app.config['POSTCODE_REGISTER']
     url = '%s/postcode/%s' % (postcode_register, 'WC2H%208AG.json')
     resp = requests.get(url)
