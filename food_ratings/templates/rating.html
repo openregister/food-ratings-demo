@@ -12,47 +12,48 @@
 
     <div class="row rating-header">
       <div class="large-12 columns">
-        <h1><span class="business">{{rating.name}}</span><span class="rating-id"> - {{fhrs_id}}</span></h1>
+        <h1 class="heading-large"><span class="business">{{rating.name}}</span><span class="rating-id"> - {{fhrs_id}}</span></h1>
       </div>
     </div>
 
-    <div class="row" class="rating-header">
+    <div class="row rating">
       <div class="large-4 columns">
-        <p><img src="{{ asset_path }}images/ratings/rating-1.png"/ class="rating"></p>
+        <p><img src="{{ asset_path }}images/ratings/rating-1.png"/></p>
       </div>
       <div class="large-8 columns">
-        <h3>Premises details</h3>
+        <h2 class="heading-medium">Premises details</h2>
         <p>{{rating.premises}}</p>
-        <h5>Premises number: 10167349</h5>
-        <h4>Local authority</h4>
+        <p>Premises number: 10167349</p>
+        <h2 class="heading-medium">Local authority</h2>
         <img src="/static/images/camden-logo-black.png" class="local-authority-logo">
         <div id="map-canvas">
           <img src="http://placehold.it/500x250">
         </div>
       </div>
     </div>
+
     <div class="row" class="inspection-details">
       <div class="large-8 columns large-offset-4">
-        <h3>Inspection details</h3>
-        <h4>Date of last inspection</h4>
+        <h2 class="heading-medium">Inspection details</h2>
+        <h2 class="heading-small">Date of last inspection</h2>
         <p>{{rating.inspection_date}} <a href="#">View inspection history</a></p>
-        <h4>Inspected by</h4>
+        <h2 class="heading-small">Inspected by</h2>
         <p>Camden Council</p>
-        <h4>Rating breakdown:</h4>
+        <h2 class="heading-small">Rating breakdown:</h2>
         <ul>
-          <li>Hygienic food handling
+          <li><h3 class="heading-small">Hygienic food handling</h3>
           Hygienic handling of food including preparation, cooking,
           re-heating, cooling and storage
           Result: Improvement necessary
           </li>
           <li>
-          Cleanliness and condition of facilities and building
+          <h3 class="heading-small">Cleanliness and condition of facilities and building</h3>
           Cleanliness and condition of facilities and building (including
           having appropriate layout, ventilation, hand washing facilities
           and pest control) to enable good food hygiene
           Result: Major improvement necessary
           </li>
-          <li>Management of food safety
+          <li><h3 class="heading-small">Management of food safety</h3>
           System or checks in place to ensure that food sold or served is
           safe to eat, evidence that staff know about food safety, and the
           food safety officer has confidence that standards will be
@@ -60,7 +61,7 @@
           Result: Major improvement necessary
           </li>
         </ul>
-        <h5>What the business says</h5>
+        <h2 class="heading-medium">What the business says</h2>
         <div class="response">
           <p>“I agree with the inspection results but have since carried out the
           following improvements:</p>
@@ -79,19 +80,16 @@
           However, on the day of the inspection this was not the case.”</p>
         </div>
 
-        <h5>Company details</h5>
+        <h2 class="heading-medium">Company details</h2>
 
-        <div class="row" class="company-details">
-          <div class="large-4 columns">
-            <p>Company name:</p>
-            <p>Company number:</p>
-            <p>Head office:</p>
-          </div>
-          <div class="large-4 columns end">
-            <p>BYRON HAMBURGERS LIMITED</p>
-            <p>07228130</p>
-            <p>1st Floor 14-15, Berners Street, London</p>
-          </div>
+        <div class="row">
+          <table class="company-details">
+            <tbody>
+              <tr><td>Company name:</td><td>BYRON HAMBURGERS LIMITED</td></tr>
+              <tr><td>Company number:</td><td>07228130</td></tr>
+              <tr><td>Head office:</td><td>1st Floor 14-15, Berners Street, London</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

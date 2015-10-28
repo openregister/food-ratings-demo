@@ -112,7 +112,7 @@ ul.accordion {
 }
 
 .more {
-  padding-top: 12px;
+  padding-top: 25px;
 }
 
 .more a {
@@ -120,7 +120,7 @@ ul.accordion {
 }
 
 hr {
-  margin: 5px 30px 40px 15px;
+  margin: 5px 30px 0px 15px;
 }
 
 .form-label {
@@ -148,6 +148,10 @@ hr {
   background-color: #3AA452;
 }
 
+#counties-list {
+  margin-top: 2.4em;
+}
+
 #counties-list li {
     list-style: none;
     border-bottom: solid 1px #DDDDDD;
@@ -169,7 +173,7 @@ hr {
 }
 
 .tabs dd, .tabs .tab-title {
-    margin-bottom: -1px !important;
+  margin-bottom: -1px !important;
 }
 
 .tab-title.active a {
@@ -190,17 +194,9 @@ hr {
   margin-right: 15px;
 }
 
-
-a.business {
-  font-weight: bold;
-}
-
 .search {
   margin-top: 25px;
-}
-
-.rating-header {
-  _margin-top: 25px;
+  margin-bottom: 30px;
 }
 
 .back {
@@ -211,25 +207,41 @@ a.business {
   text-decoration: underline;
 }
 
-.rating {
-  width: 250px;
-}
-
 .rating-header {
   margin-bottom: 35px;
 }
 
-span.business {
-  text-transform: capitalize;
+.rating-header h1 {
+  margin-top: 10px;
 }
 
-span.rating-id {
-  text-transform: capitalize;
-  font-size: 1.6rem;
+.rating h2 {
+  margin-top: 0px;
 }
 
-.local-authority-logo {
+.rating img {
+  width: 250px;
+}
+
+.rating-id {
+  font-size: 1.1rem;
+  font-weight: normal;
+}
+
+.business {
+  font-weight: normal;
+}
+
+img.local-authority-logo {
   width: 150px;
+}
+
+.company-details {
+  border: none;
+}
+
+.company-details td {
+  background-color: #fff;
 }
 
 @media only screen and (min-width: 40.063em) and (max-width: 64em)  {
@@ -252,3 +264,98 @@ span.rating-id {
   }
 
 }
+
+
+/* GOVUK elements heading stuff */
+
+.heading-xlarge {
+  font-size: 32px;
+  line-height: 1.09375;
+  font-weight: 700;
+  text-transform: none;
+  margin-top: 0.46875em;
+  margin-bottom: 0.9375em;
+}
+
+@media (min-width: 641px) {
+  .heading-xlarge {
+    font-size: 48px;
+    line-height: 1.0416666667;
+  }
+}
+
+@media (min-width: 641px) {
+  .heading-xlarge {
+    margin-top: 0.625em;
+    margin-bottom: 1.25em;
+  }
+}
+
+.heading-large {
+  font-size: 24px;
+  line-height: 1.0416666667;
+  font-weight: 700;
+  text-transform: none;
+  margin-top: 1.0416666667em;
+  margin-bottom: 0.4166666667em;
+}
+
+@media (min-width: 641px) {
+  .heading-large {
+    font-size: 36px;
+    line-height: 1.1111111111;
+  }
+}
+
+@media (min-width: 641px) {
+  .heading-large {
+    margin-top: 1.25em;
+    margin-bottom: 0.5555555556em;
+  }
+}
+
+.heading-medium {
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 700;
+  text-transform: none;
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+}
+
+@media (min-width: 641px) {
+  .heading-medium {
+    font-size: 24px;
+    line-height: 1.25;
+  }
+}
+
+@media (min-width: 641px) {
+  .heading-medium {
+    margin-top: 1.875em;
+    margin-bottom: 0.8333333333em;
+  }
+}
+
+.heading-small {
+  font-size: 16px;
+  line-height: 1.25;
+  font-weight: 700;
+  text-transform: none;
+  margin-top: 0.625em;
+  margin-bottom: 0.3125em;
+}
+
+@media (min-width: 641px) {
+  .heading-small {
+    font-size: 19px;
+    line-height: 1.3157894737;
+  }
+}
+
+@media (min-width: 641px) {
+  .heading-small {
+    margin-top: 1.0526315789em;
+  }
+}
+
