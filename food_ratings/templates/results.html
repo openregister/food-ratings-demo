@@ -54,9 +54,8 @@
         </ul>
 
         <div class="tabs-content">
-
           <div class="content active" id="list">
-            <div class="row list-view">
+            <div class="row result-view">
               <div class="large-4 columns">
                 <div class="filters">
                  <p>Filter results by</p>
@@ -98,23 +97,78 @@
             </div>
           </div>
 
-          <div class="content" id="map">
-            <div class="large-2 columns">
+         <div class="content" id="map">
+          <div class="row result-view">
+            <div class="large-4 columns">
               <div class="filters">
-                The filters panel
+               <p>Filter results by</p>
               </div>
             </div>
+            <div class="large-8 columns">
+              <p>{{results|count}} result{% if results|count > 1 %}s{% endif %} for {{request.args.business}}</p>
+            </div>
+          </div>
 
-            <div class="large-10 columns">
-              <div id="map-canvas"></div>
+            <div class="row">
+              <div class="large-4 columns filters">
+                <label>Hygiene rating
+                  <select>
+                    <option value="0">0 - Urgent improvement needed</option>
+                    <option value="1">1 - Major improvement needed</option>
+                    <option value="2">2 - Improvement needed</option>
+                    <option value="3">3 - Generally satisfactory</option>
+                    <option value="4">4 - Good</option>
+                    <option value="5">5 - Very good</option>
+                  </select>
+                </label>
+                <label>Sector
+                  <select>
+                    <option value="0">All sectors</option>
+                  </select>
+                </label>
+              </div>
+              <div class="large-8 columns">
+                 <img src="http://placehold.it/500x300">
+               <div id="map-canvas"></div>
+
+              </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
   </main>
 
   {% include "footer.html" %}
+{% endblock %}
+
+{% block body_end %}
+
+<script>
+  var initialize = function () {
+
+    var mapCanvas = document.getElementById('map-canvas'),
+        coordinates = new google.maps.LatLng({{ latitude }}, {{longitude }}),
+        mapOptions = {
+            center: coordinates,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            zoomControl: true,
+            zoomControlOptions: {
+              style: google.maps.ZoomControlStyle.SMALL
+            }
+        },
+        map = new google.maps.Map(mapCanvas, mapOptions),
+        marker = new google.maps.Marker({
+            position: coordinates,
+            map: map,
+            title: "Byron"
+        });
+    };
+
+    $(document).ready(function(){
+        initialize();
+    });
+</script>
 {% endblock %}
