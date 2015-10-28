@@ -43,7 +43,7 @@ def search():
 def rating(fhrs_id):
     rating = {'name': 'Byron Hamburgers', 'premises': '1a St Giles High Street, WC2H 8AG', 'inspection_date': '27 August 2015'}
 
-    # get lat long from postcode
+    # get lat long from postcode of rating. for moment hard coded
     postcode_register = current_app.config['POSTCODE_REGISTER']
     url = '%s/postcode/%s' % (postcode_register, 'WC2H%208AG.json')
     resp = requests.get(url)
