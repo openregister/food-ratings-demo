@@ -18,6 +18,17 @@ from food_ratings.frontend.forms import SearchForm
 frontend = Blueprint('frontend', __name__, template_folder='templates')
 
 
+stub_premises = { '15662079000': {
+        'premises':'15662079000',
+        'address':'5167078'},
+        '14445100000': {
+        'premises':'14445100000',
+        'address':'5164231'},
+        '15610045000': {
+        'premises':'15610045000',
+        'address':'5069470'}}
+
+
 @frontend.route('/',  methods=['GET', 'POST'])
 def index():
     form = SearchForm()
@@ -37,8 +48,12 @@ def index():
 def search():
     # find the item
     form = SearchForm(business=request.args.get('establishment_name'), location=request.args.get('location'))
-    results = _food_premises_search()
-    return render_template('results.html', form=form, results=results)
+    premises = _food_premises_search()
+    # get addresses
+    for p in premises:
+        _attach_address(p)
+
+    return render_template('results.html', form=form, results=premises)
 
 
 # dummy API
@@ -70,10 +85,11 @@ def company_register(company):
 @frontend.route('/premises.openregister.org/premises/<premises>')
 def premises_register(premises):
     # need to add a UPRN for this ..
-    return jsonify({
-        'premises':'15662079000',
-        'address':'5167078'
-    })
+    # return jsonify({
+    #     'premises':'15662079000',
+    #     'address':'5155313'
+    # })
+    return jsonify(stub_premises[premises])
 
 @frontend.route('/food-premises.openregister.org/food-premises/<food_premises>')
 def food_premises_register(food_premises):
@@ -157,9 +173,14 @@ def rating(fhrs_id):
     return render_template('rating.html', rating=rating, fhrs_id=fhrs_id, latitude=latitude, longitude=longitude)
 
 
-
 def _food_premises_search():
     resp = food_premises_register_search()
     results = json.loads(resp.data)
     current_app.logger.info(json.loads(resp.data))
     return results['results']
+
+def _attach_address(food_premises):
+    p = premises_register(food_premises['premises'])
+    data = json.loads(p.data)
+    food_premises['address'] = data['address']
+    current_app.logger.info(food_premises)
