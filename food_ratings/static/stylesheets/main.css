@@ -22,6 +22,9 @@ body {
   text-transform: none;
 }
 
+.top-bar {
+  overflow: visible;
+}
 
 #map-canvas {
   margin-top: 10px;
@@ -288,6 +291,10 @@ img.local-authority-logo {
   .fsa-button {
     top: 0px;
   }
+
+  .tab-title a.wide {
+    padding-right: 20px;
+  }
 }
 
 @media only screen and (max-width: 40em) {
@@ -297,6 +304,10 @@ img.local-authority-logo {
 
   .fsa-button {
     top: 0px;
+  }
+
+  .tab-title a.wide {
+    padding-right: 20px;
   }
 
 }
@@ -317,11 +328,6 @@ img.local-authority-logo {
   .heading-xlarge {
     font-size: 48px;
     line-height: 1.0416666667;
-  }
-}
-
-@media (min-width: 641px) {
-  .heading-xlarge {
     margin-top: 0.625em;
     margin-bottom: 1.25em;
   }
@@ -340,11 +346,6 @@ img.local-authority-logo {
   .heading-large {
     font-size: 36px;
     line-height: 1.1111111111;
-  }
-}
-
-@media (min-width: 641px) {
-  .heading-large {
     margin-top: 1.25em;
     margin-bottom: 0.5555555556em;
   }
@@ -363,15 +364,11 @@ img.local-authority-logo {
   .heading-medium {
     font-size: 24px;
     line-height: 1.25;
-  }
-}
-
-@media (min-width: 641px) {
-  .heading-medium {
     margin-top: 1.875em;
     margin-bottom: 0.8333333333em;
   }
 }
+
 
 .heading-small {
   font-size: 16px;

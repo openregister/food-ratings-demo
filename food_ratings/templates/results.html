@@ -130,7 +130,7 @@
               </div>
               <div class="large-8 columns">
                  <img src="http://placehold.it/500x300">
-               <div id="map-canvas"></div>
+               <div id="map-canvas" style="display: none"></div>
 
               </div>
             </div>
@@ -150,7 +150,7 @@
   var initialize = function () {
 
     var mapCanvas = document.getElementById('map-canvas'),
-        coordinates = new google.maps.LatLng({{ latitude }}, {{longitude }}),
+        coordinates = new google.maps.LatLng(0,0),
         mapOptions = {
             center: coordinates,
             zoom: 15,
