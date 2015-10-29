@@ -38,12 +38,12 @@ def search():
     # find the item
     form = SearchForm(business=request.args.get('establishment_name'), location=request.args.get('location'))
     premises = _food_premises_search()
-    # get addresses
-    for p in premises:
-        _attach_address(p)
-
-
-    return render_template('results.html', form=form, results=premises)
+    # get  and attach addresses
+    results = [p['entry'] for p in premises]
+    for establishment in results:
+        _attach_address(establishment)
+    current_app.logger.info(results)
+    return render_template('results.html', form=form, results=results)
 
 
 # dummy API
@@ -86,7 +86,6 @@ def food_premises_register(food_premises):
 
 @frontend.route('/food-premises.openregister.org/some-search-url')
 def food_premises_register_search():
-    name = request.args.get('establishment_name')
     return jsonify({'results': [
         {'food-premises':'759332',
         'name':'Byron',
@@ -155,10 +154,14 @@ def rating(fhrs_id):
 
 
 def _food_premises_search():
-    resp = food_premises_register_search()
-    results = json.loads(resp.data)
-    current_app.logger.info(json.loads(resp.data))
-    return results['results']
+    name = request.args.get('establishment_name')
+
+    # temp hack to get Byron restaurants until name search works
+    food_premises_register = current_app.config['FOOD_PREMISES_REGISTER']
+    url = '%s/current.json' % food_premises_register
+    resp = requests.get(url)
+    current_app.logger.info(resp.json())
+    return resp.json()
 
 def _attach_address(food_premises):
     premises_register = current_app.config['PREMISES_REGISTER']

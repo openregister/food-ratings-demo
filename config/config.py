@@ -10,6 +10,7 @@ class Config(object):
     COMPANY_REGISTER = os.environ.get('COMPANY_REGISTER')
     ADDRESS_REGISTER = os.environ.get('ADDRESS_REGISTER')
     POSTCODE_REGISTER = os.environ.get('POSTCODE_REGISTER')
+    FOOD_PREMISES_REGISTER = os.environ.get('FOOD_PREMISES_REGISTER')
 
 
 
