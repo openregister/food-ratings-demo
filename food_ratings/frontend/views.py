@@ -18,17 +18,6 @@ from food_ratings.frontend.forms import SearchForm
 frontend = Blueprint('frontend', __name__, template_folder='templates')
 
 
-stub_premises = { '15662079000': {
-        'premises':'15662079000',
-        'address':'5167078'},
-        '14445100000': {
-        'premises':'14445100000',
-        'address':'5164231'},
-        '15610045000': {
-        'premises':'15610045000',
-        'address':'5069470'}}
-
-
 @frontend.route('/',  methods=['GET', 'POST'])
 def index():
     form = SearchForm()
@@ -82,16 +71,6 @@ def company_register(company):
         'industry':'56101',
         'start-date':'2010-04-20'
     })
-
-@frontend.route('/premises.openregister.org/premises/<premises>')
-def premises_register(premises):
-    # need to add a UPRN for this ..
-    # data is:
-    # {'premises':'15662079000', 'address':'5167078'}
-    # {'premises':'14445100000', 'address':'5164231'}
-    # {'premises':'15610045000', 'address':'5069470'}
-    #
-    return jsonify(stub_premises[premises])
 
 @frontend.route('/food-premises.openregister.org/food-premises/<food_premises>')
 def food_premises_register(food_premises):
@@ -182,9 +161,12 @@ def _food_premises_search():
     return results['results']
 
 def _attach_address(food_premises):
-    p = premises_register(food_premises['premises'])
-    data = json.loads(p.data)
-    uprn = data['address']
+    premises_register = current_app.config['PREMISES_REGISTER']
+    premises_url = '%s/premises/%s.json' % (premises_register, food_premises['premises'])
+    resp = requests.get(premises_url)
+    uprn = resp.json()['entry']['address']
+    current_app.logger.info(resp.json()['entry']['address'])
+
     address_register = current_app.config['ADDRESS_REGISTER']
     address_url = '%s/address/%s.json' % (address_register, uprn)
     resp = requests.get(address_url).json()
