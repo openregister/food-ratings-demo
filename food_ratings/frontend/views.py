@@ -53,6 +53,7 @@ def search():
     for p in premises:
         _attach_address(p)
 
+
     return render_template('results.html', form=form, results=premises)
 
 
@@ -183,5 +184,11 @@ def _food_premises_search():
 def _attach_address(food_premises):
     p = premises_register(food_premises['premises'])
     data = json.loads(p.data)
-    food_premises['address'] = data['address']
-    current_app.logger.info(food_premises)
+    uprn = data['address']
+    address_register = current_app.config['ADDRESS_REGISTER']
+    address_url = '%s/address/%s.json' % (address_register, uprn)
+    resp = requests.get(address_url).json()
+    food_premises['property'] = resp['entry'].get('property')
+    food_premises['street'] = resp['entry'].get('street')
+    food_premises['town'] = resp['entry'].get('town')
+    food_premises['postcode'] = resp['entry'].get('postcode')
