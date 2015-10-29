@@ -85,10 +85,11 @@ def company_register(company):
 @frontend.route('/premises.openregister.org/premises/<premises>')
 def premises_register(premises):
     # need to add a UPRN for this ..
-    # return jsonify({
-    #     'premises':'15662079000',
-    #     'address':'5155313'
-    # })
+    # data is:
+    # {'premises':'15662079000', 'address':'5167078'}
+    # {'premises':'14445100000', 'address':'5164231'}
+    # {'premises':'15610045000', 'address':'5069470'}
+    #
     return jsonify(stub_premises[premises])
 
 @frontend.route('/food-premises.openregister.org/food-premises/<food_premises>')
