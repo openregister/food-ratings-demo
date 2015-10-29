@@ -84,33 +84,6 @@ def food_premises_register(food_premises):
     })
 
 
-@frontend.route('/food-premises.openregister.org/some-search-url')
-def food_premises_register_search():
-    return jsonify({'results': [
-        {'food-premises':'759332',
-        'name':'Byron',
-        'business':'company:07228130',
-        'premises':'15662079000',
-        'local-authority':'00AG',
-        'food-premises-types':['Restaurant','Cafe','Canteen']},
-
-        {'food-premises':'785709',
-        'name':'Byron',
-        'business':'company:07228130',
-        'premises':'15610045000',
-        'local-authority':'00AG',
-        'food-premises-types':['Restaurant','Cafe','Canteen']},
-
-        {'food-premises':'516226',
-        'name':'Byron',
-        'business':'company:07228130',
-        'premises':'14445100000',
-        'local-authority':'00AG',
-        'food-premises-types':['Restaurant','Cafe','Canteen']}
-        ]
-    })
-
-
 @frontend.route('/food-premises-rating.openregister.org/food-premises-rating/759332-2014-04-09')
 def food_premises_rating_register_1(food_premises_rating):
     return jsonify({
@@ -157,6 +130,7 @@ def _food_premises_search():
     name = request.args.get('establishment_name')
 
     # temp hack to get Byron restaurants until name search works
+    # we can just get all of them as we only have byron in register
     food_premises_register = current_app.config['FOOD_PREMISES_REGISTER']
     url = '%s/current.json' % food_premises_register
     resp = requests.get(url)
