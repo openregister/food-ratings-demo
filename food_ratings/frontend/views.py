@@ -151,7 +151,7 @@ def rating(fhrs_id):
     data = resp.json()
     latitude = data['entry']['latitude']
     longitude = data['entry']['longitude']
-    return render_template('rating.html', rating=rating, fhrs_id=fhrs_id, latitude=latitude, longitude=longitude)
+    return render_template('rating.html', rating=rating, fhrs_id=fhrs_id, latitude=latitude, longitude=longitude, premises=15662079000, company='07228130')
 
 
 def _food_premises_search():
