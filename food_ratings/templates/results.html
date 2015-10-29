@@ -90,7 +90,7 @@
                     <li>
                       <h2 class="heading-small"><a href="/rating/FHR46250" class="business">{{result.name}}</a></h2>
                       <!-- TODO create an address filter to format address -->
-                      <p><span>Premises: {{result.property}} {{result.street}}, {{result.town}}, {{result.postcode}}</span> <span>Last inspection: {{result.inspection_date}}</span> <span>Rating: {{result.rating}}</span></p>
+                      <p><span>Premises: {{result | format_address}} <span>Last inspection: {{result.inspection_date}}</span> <span>Rating: {{result.rating}}</span></p>
                     </li>
                   {% endfor %}
                 </ul>

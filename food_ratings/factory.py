@@ -14,6 +14,7 @@ def create_app(config_filename):
     register_errorhandlers(app)
     register_blueprints(app)
     register_extensions(app)
+    register_filters(app)
     app.context_processor(asset_path_context_processor)
     return app
 
@@ -45,3 +46,20 @@ def register_extensions(app):
     #     cache = Redis() # local dev default
 
     # requests_cache.install_cache('registers_cache', backend='redis', expire_after=300, connection=cache)
+
+
+def register_filters(app):
+
+    def format_address(s):
+        address_lines = []
+        if s['property']:
+            address_lines.append(s['property'])
+        if s['street']:
+            address_lines.append(s['street'])
+        if s['town']:
+            address_lines.append(s['town'])
+        if s['postcode']:
+            address_lines.append(s['postcode'])
+        return ", ".join(address_lines)
+
+    app.jinja_env.filters['format_address'] = format_address
