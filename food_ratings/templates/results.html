@@ -17,12 +17,12 @@
     <div class="row search">
       <form class="form" action="{{url_for('frontend.index')}}" method="POST">
         <div class="large-5 columns">
-          <label class="form-label" for="name-or-id">Business name or ID number
-            <span class="form-hint">For example, Kebab world or FHR1234</span>
+          <label class="form-label" for="name-or-id">Establishment name
+            <span class="form-hint">For example, Kebab world</span>
           </label>
-          {{ form.business(class_="form-control", id="name-or-id")|safe }}
-          {% if form.business.errors %}
-            {% for error in form.business.errors %}
+          {{ form.establishment_name(class_="form-control", id="name-or-id")|safe }}
+          {% if form.establishment_name.errors %}
+            {% for error in form.establishment_name.errors %}
               <span class="error">{{error}}</span>
             {% endfor %}
           {% endif %}

@@ -7,7 +7,8 @@ from flask import (
     request,
     redirect,
     url_for,
-    jsonify
+    jsonify,
+    json
 )
 
 import requests
@@ -21,12 +22,12 @@ frontend = Blueprint('frontend', __name__, template_folder='templates')
 def index():
     form = SearchForm()
     if form.validate_on_submit():
-        business = form.data.get('business', '').strip().lower()
+        establishment_name = form.data.get('establishment_name', '').strip().lower()
         location = form.data.get('location', '').strip().lower()
         try:
-            return redirect(url_for('.search', business=business, location=location))
+            return redirect(url_for('.search', establishment_name=establishment_name, location=location))
         except Exception as e:
-            message = 'There was a problem searching for: %s' % business
+            message = 'There was a problem searching for: %s' % establishment_name
             flash(message)
             abort(500)
     return render_template('index.html', form=form)
@@ -35,12 +36,8 @@ def index():
 @frontend.route('/search')
 def search():
     # find the item
-    form = SearchForm(business=request.args['business'], location=request.args['location'])
-    results = [
-        {'name': 'Byron Hamburgers', 'premises': '1a St Giles High Street, WC2H 8AG', 'inspection_date': '27 August 2015', 'rating': '1 – Major improvement needed'},
-        {'name': 'Byron Hamburgers', 'premises': '6 Rathbone Place, London, W1T 1HL', 'inspection_date': '1 December 2014', 'rating': '4 – Good'},
-        {'name': 'Byron Hamburgers', 'premises': '6 Store Street, London, WC1E 7DQ', 'inspection_date': '22 July 2012', 'rating': '5 – Very good'}
-    ]
+    form = SearchForm(business=request.args.get('establishment_name'), location=request.args.get('location'))
+    results = _food_premises_search()
     return render_template('results.html', form=form, results=results)
 
 
@@ -74,7 +71,7 @@ def company_register(company):
 def premises_register(premises):
     # need to add a UPRN for this ..
     return jsonify({
-        'premises':'01201000100196',
+        'premises':'15662079000',
         'address':'5167078'
     })
 
@@ -84,10 +81,39 @@ def food_premises_register(food_premises):
         'food-premises':'759332',
         'name':'Byron',
         'business':'company:07228130',
-        'premises':'01201000100196',
+        'premises':'15662079000',
         'local-authority':'00AG',
         'food-premises-types':['Restaurant','Cafe','Canteen']
     })
+
+
+@frontend.route('/food-premises.openregister.org/some-search-url')
+def food_premises_register_search():
+    name = request.args.get('establishment_name')
+    return jsonify({'results': [
+        {'food-premises':'759332',
+        'name':'Byron',
+        'business':'company:07228130',
+        'premises':'15662079000',
+        'local-authority':'00AG',
+        'food-premises-types':['Restaurant','Cafe','Canteen']},
+
+        {'food-premises':'785709',
+        'name':'Byron',
+        'business':'company:07228130',
+        'premises':'15610045000',
+        'local-authority':'00AG',
+        'food-premises-types':['Restaurant','Cafe','Canteen']},
+
+        {'food-premises':'516226',
+        'name':'Byron',
+        'business':'company:07228130',
+        'premises':'14445100000',
+        'local-authority':'00AG',
+        'food-premises-types':['Restaurant','Cafe','Canteen']}
+        ]
+    })
+
 
 @frontend.route('/food-premises-rating.openregister.org/food-premises-rating/759332-2014-04-09')
 def food_premises_rating_register_1(food_premises_rating):
@@ -129,3 +155,11 @@ def rating(fhrs_id):
     latitude = data['entry']['latitude']
     longitude = data['entry']['longitude']
     return render_template('rating.html', rating=rating, fhrs_id=fhrs_id, latitude=latitude, longitude=longitude)
+
+
+
+def _food_premises_search():
+    resp = food_premises_register_search()
+    results = json.loads(resp.data)
+    current_app.logger.info(json.loads(resp.data))
+    return results['results']
