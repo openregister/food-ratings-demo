@@ -37,7 +37,6 @@ def index():
 def search():
     establishment_name = request.args.get('establishment_name')
     form = SearchForm(establishment_name=establishment_name, location=request.args.get('location'))
-
     results = [item['fields'] for item in _food_premises_search(establishment_name)]
     for food_premises in results:
         _attach_address(food_premises)
@@ -47,10 +46,9 @@ def search():
     return render_template('results.html', form=form, results=results)
 
 
-@frontend.route('/rating/<food_premises_rating>')
-def rating(food_premises_rating):
-    food_premises_id = food_premises_rating.split('-')[0]
-    premises = _get_food_premises(food_premises_id)
+@frontend.route('/premises/<premises>/rating/<food_premises_rating>')
+def rating(premises, food_premises_rating):
+    premises = _get_food_premises(premises)
     rating = _get_rating(food_premises_rating)
     _attach_address(premises['entry'])
     _attach_local_authority(premises['entry'])
@@ -75,6 +73,12 @@ def _food_premises_search(name):
 def _get_food_premises(food_premises):
     rating_register = current_app.config['FOOD_PREMISES_REGISTER']
     url = '%s/food-premises/%s.json' % (rating_register, food_premises)
+
+    current_app.logger.info('**************** URL')
+    current_app.logger.info(url)
+    current_app.logger.info('**************** URL')
+
+
     resp = requests.get(url)
     return resp.json()
 

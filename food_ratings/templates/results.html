@@ -90,7 +90,7 @@
                 <ul class="result-list">
                   {% for result in results %}
                     <li>
-                      <h2 class="heading-small">{% if result.last_inspection %}<a href="/rating/{{result.last_inspection.food_premises_rating}}" class="business">{{result.name}}</a>{% else %}{{result.name}}{% endif %}</h2>
+                      <h2 class="heading-small">{% if result.last_inspection %}<a href="/premises/{{result.food_premises}}/rating/{{result.last_inspection.food_premises_rating}}" class="business">{{result.name}}</a>{% else %}{{result.name}}{% endif %}</h2>
                       <!-- TODO create an address filter to format address -->
                       <p>
                         <span>Premises: {{result | format_address}} <span>
