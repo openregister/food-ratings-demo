@@ -77,8 +77,9 @@ def register_filters(app):
     def format_curie(s):
         return s.split(":")[1]
 
+    # TBD: translate markdown..
     def format_reply(s):
-        return s.replace('\n', '<br/>')
+        return s.replace('\\n','<br/>\n').replace('\n', '<br/>')
 
 
     # def format_inspection_date(s):

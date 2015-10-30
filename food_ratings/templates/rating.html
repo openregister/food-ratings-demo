@@ -82,7 +82,7 @@
         {% if rating.entry['food-premises-rating-reply']  %}
         <h2 class="heading-medium">What the business says</h2>
         <div class="response">
-          <p>{{rating.entry['food-premises-rating-reply'] | format_reply | replace('\\n', '\n') | safe }}</p>
+          <p>{{rating.entry['food-premises-rating-reply'] | format_reply | safe }}</p>
         </div>
         {% endif %}
 
