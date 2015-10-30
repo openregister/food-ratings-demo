@@ -69,7 +69,9 @@ def rating(premises, food_premises_rating):
     current_app.logger.info(company)
     current_app.logger.info(address)
 
-    return render_template('rating.html', rating=rating, food_premises_rating=food_premises_rating, latitude=latitude, longitude=longitude, premises=premises, company=company, address=address)
+    food_premises = premises['entry']
+
+    return render_template('rating.html', rating=rating, food_premises_rating=food_premises_rating, latitude=latitude, longitude=longitude, food_premises=food_premises, premises=premises, company=company, address=address)
 
 
 def _food_premises_search(name):
