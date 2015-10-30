@@ -8,8 +8,8 @@
 
   <main id="content" role="main">
 
-      <!-- <p>PREMISES: {{premises}}</p>
-      <p>RATINGS: {{rating}}</p> -->
+    <!-- <p>PREMISES: {{premises}}</p> -->
+     <!--  <p>RATINGS: {{rating}}</p> -->
 
     <div class="row back">
       <div class="large-1 columns">
@@ -41,7 +41,23 @@
       <div class="large-7 columns large-offset-4">
         <h2 class="heading-medium">Inspection details</h2>
         <h2 class="heading-small">Date of last inspection</h2>
-        <p>{{rating.inspection_date}} <a href="#">View inspection history</a></p>
+        <p>{{rating.entry['start-date']}}</p>
+        <h2 class="heading-small">Food Hygiene Rating</h2>
+        <p class="food-hygiene-rating">{{ premises.entry | format_inspection }}</p>
+        {% if premises.entry.inspection_history %}
+        <p>
+          <ul class="accordion" data-accordion>
+            <li class="accordion-navigation">
+              <a href="#history">View inspection history</a>
+              <div id="history" class="content">
+                {% for inspection in premises.entry.inspection_history %}
+                  <p>{{ inspection | format_inspection}} - Inspection date: {{inspection.start_date}}</p>
+                {% endfor %}
+              </div>
+            </li>
+          </ul>
+        </p>
+        {% endif %}
         <h2 class="heading-small">Inspected by</h2>
         <p>Camden Council</p>
         <h2 class="heading-small">Rating breakdown:</h2>

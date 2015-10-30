@@ -41,7 +41,7 @@ def search():
     for food_premises in results:
         _attach_address(food_premises)
         _attach_local_authority(food_premises)
-        _attach_latest_rating(food_premises)
+        _attach_ratings(food_premises)
     current_app.logger.info(results)
     return render_template('results.html', form=form, results=results)
 
@@ -52,6 +52,7 @@ def rating(premises, food_premises_rating):
     rating = _get_rating(food_premises_rating)
     _attach_address(premises['entry'])
     _attach_local_authority(premises['entry'])
+    _attach_ratings(premises['entry'])
 
     # get lat long from postcode
     postcode_register = current_app.config['POSTCODE_REGISTER']
@@ -73,12 +74,6 @@ def _food_premises_search(name):
 def _get_food_premises(food_premises):
     rating_register = current_app.config['FOOD_PREMISES_REGISTER']
     url = '%s/food-premises/%s.json' % (rating_register, food_premises)
-
-    current_app.logger.info('**************** URL')
-    current_app.logger.info(url)
-    current_app.logger.info('**************** URL')
-
-
     resp = requests.get(url)
     return resp.json()
 
@@ -110,17 +105,22 @@ def _attach_local_authority(food_premises):
         la_url = '%s/local-authority/%s.json' % (local_authority_register, food_premises['local-authority'])
         data = requests.get(la_url).json()
         food_premises['local-authority-name'] = data['entry']['name']
-        # food_premises['local-authority-website'] = data['entry']['website']
+        food_premises['local-authority-website'] = data['entry']['website']
 
 
-def _attach_latest_rating(food_premises):
+def _attach_ratings(food_premises):
     search_url = current_app.config['FOOD_PREMISES_RATING_SEARCH_URL']
-    params = {"q": food_premises['food_premises'], "q.options": "{fields:['food_premises']}"}
+    premises_key = food_premises.get('food_premises')
+    if not premises_key:
+        premises_key = food_premises.get('food-premises')
+    params = {"q": premises_key, "q.options": "{fields:['food_premises']}"}
     data = requests.get(search_url, params=params)
     ratings = [rating['fields'] for rating in data.json()['hits']['hit']]
     food_premises['ratings'] = ratings
-    if len(ratings) == 1:
+    #TODO proper sort by start date
+    if len(ratings) > 0:
         food_premises['last_inspection'] = ratings[0]
+        food_premises['inspection_history'] = ratings[1:]
     else:
         food_premises['last_inspection'] = {}
 
@@ -133,62 +133,4 @@ def _attach_latest_rating(food_premises):
 #         'industry':'56101',
 #         'name':'Licensed restaurants'
 #     })
-
-# @frontend.route('/food-premises-rating.openregister.org/food-premises-rating/759332-2014-04-09')
-# def food_premises_rating_register_1(food_premises_rating):
-#     return jsonify({
-#         "food-premises-rating":"759332-2014-04-09",
-#         "food-premises":"759332",
-#         "food-premises-rating-value":"4",
-#         "food-premises-rating-hygiene-score":"5",
-#         "food-premises-rating-structural-score":"10",
-#         "food-premises-rating-confidence-in-management-score":"5",
-#         "inspector":"local-authority:00AG",
-#         "food-premises-rating-reply":"",
-#         "start-date":"2014-04-09"
-#     })
-
-# @frontend.route('/food-premises-rating.openregister.org/food-premises-rating/759332-2015-08-27')
-# def food_premises_rating_register_2(food_premises_rating):
-#     return jsonify({
-#         "food-premises-rating":"759332-2015-08-27",
-#         "food-premises":"759332",
-#         "food-premises-rating-value":"1",
-#         "food-premises-rating-hygiene-score":"15",
-#         "food-premises-rating-structural-score":"15",
-#         "food-premises-rating-confidence-in-management-score":"20",
-#         "inspector":"local-authority:00AG",
-#         "food-premises-rating-reply":"I agree with the inspection results but have since carried out the following improvements:\n\nThere is a new manager and/or new staff. The staff have been trained/retrained/given instruction/are under revised supervisory arrangements.\n\nThe points raised by the Environmental Health Officers were acted upon immediately and we look forward to welcoming them back for a re-inspection when we will be delighted to demonstrate our high standards at this restaurant.\n\nThe conditions found at the time of the inspection were not typical of the normal conditions maintained at the establishment and arose because: Historically, cooking temperature records were available. However, on the day of the inspection this was not the case.",
-#         "start-date":"2015-08-27"
-#     })
-
-# @frontend.route('/local-authority.openregister.org/local-authority/<code>')
-# def local_authority_register(code):
-#     return jsonify({
-#         'local-authority':'00AG',
-#         'name':'Camden',
-#         'website':'https://www.camden.gov.uk'
-#     })
-
-# @frontend.route('/company.openregister.org/company/<company>')
-# def company_register(company):
-#     return jsonify({
-#         'company':'07228130',
-#         'name': 'BYRON HAMBURGERS LIMITED',
-#         'address':'5155313',
-#         'industry':'56101',
-#         'start-date':'2010-04-20'
-#     })
-
-# @frontend.route('/food-premises.openregister.org/food-premises/<food_premises>')
-# def food_premises_register(food_premises):
-#     return jsonify({
-#         'food-premises':'759332',
-#         'name':'Byron',
-#         'business':'company:07228130',
-#         'premises':'15662079000',
-#         'local-authority':'00AG',
-#         'food-premises-types':['Restaurant','Cafe','Canteen']
-#     })
-
 

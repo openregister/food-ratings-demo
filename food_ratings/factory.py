@@ -65,8 +65,11 @@ def register_filters(app):
 
     def format_inspection(s):
         ratings_map = {"0": "Urgent improvement needed", "1": "Major improvement needed", "2": "Improvement needed", "3": "Generally satisfactory", "4": "Good", "5": "Very good"}
-        if s['last_inspection']:
+        if s.get('last_inspection'):
             rating_value = s['last_inspection']['food_premises_rating_value']
+            return "Rating: %s - %s" % (rating_value, ratings_map[rating_value])
+        elif s.get('food_premises_rating_value'):
+            rating_value = s['food_premises_rating_value']
             return "Rating: %s - %s" % (rating_value, ratings_map[rating_value])
         else:
             return "Not inspected yet"

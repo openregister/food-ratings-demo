@@ -251,8 +251,12 @@ hr {
 }
 
 .rating-id {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: normal;
+}
+
+.food-hygiene-rating {
+  font-weight: bold
 }
 
 .business {
