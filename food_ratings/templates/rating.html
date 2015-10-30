@@ -7,10 +7,6 @@
 {% block content %}
 
   <main id="content" role="main">
-
-    <!-- <p>PREMISES: {{premises}}</p> -->
-     <!--  <p>RATINGS: {{rating}}</p> -->
-
     <div class="row back">
       <div class="large-1 columns">
       <p><a href="{{url_for('frontend.search', location=location, establishment_name=premises.entry.name)}}"><i class="fa fa-caret-left"></i>Back</a></p>
@@ -51,7 +47,7 @@
               <a href="#history">View inspection history</a>
               <div id="history" class="content">
                 {% for inspection in premises.entry.inspection_history %}
-                  <p>{{ inspection | format_inspection}} - Inspection date: {{inspection.start_date}}</p>
+                  <p>{{inspection.start_date}} - {{ inspection | format_inspection}}</p>
                 {% endfor %}
               </div>
             </li>
@@ -63,35 +59,40 @@
         <h2 class="heading-small">Rating breakdown:</h2>
         <ul>
           <li><h3 class="heading-small">Hygienic food handling</h3>
-          <p>Hygienic handling of food including preparation, cooking,
-          re-heating, cooling and storage. <span class="inspection-result">Result: Improvement necessary</span></p>
+            <span class="inspection-result">Result: Improvement necessary</span>
+            <p>Hygienic handling of food including preparation, cooking,
+          re-heating, cooling and storage. </p>
           </li>
           <li>
-          <h3 class="heading-small">Cleanliness and condition of facilities and building</h3>
-          <p>Cleanliness and condition of facilities and building (including
+            <h3 class="heading-small">Cleanliness and condition of facilities and building</h3>
+            <span class="inspection-result">Result: Major improvement necessary</span>
+            <p>Cleanliness and condition of facilities and building (including
           having appropriate layout, ventilation, hand washing facilities
-          and pest control) to enable good food hygiene. <span class="inspection-result">Result: Major improvement necessary</span></p>
+          and pest control) to enable good food hygiene.</p>
           </li>
-          <li><h3 class="heading-small">Management of food safety</h3>
-          <p>System or checks in place to ensure that food sold or served is
+          <li>
+            <h3 class="heading-small">Management of food safety</h3>
+            <span class="inspection-result">Result: Major improvement necessary</span>
+            <p>System or checks in place to ensure that food sold or served is
           safe to eat, evidence that staff know about food safety, and the
           food safety officer has confidence that standards will be
-          maintained in future. <span class="inspection-result">Result: Major improvement necessary</span></p>
+          maintained in future.</p>
           </li>
         </ul>
+        {% if rating.entry['food-premises-rating-reply']  %}
         <h2 class="heading-medium">What the business says</h2>
         <div class="response">
           <p>{{rating.entry['food-premises-rating-reply'] | format_reply | safe }}</p>
         </div>
+        {% endif %}
 
         <h2 class="heading-medium">Company details</h2>
-
         <div class="row">
           <table class="company-details">
             <tbody>
-              <tr><td>Company name:</td><td>BYRON HAMBURGERS LIMITED</td></tr>
+              <tr><td>Company name:</td><td>{{company.company_name}}</td></tr>
               <tr><td>Company number:</td><td><a href="https://beta.companieshouse.gov.uk/company/{{premises.entry.business | format_curie }}">{{premises.entry.business | format_curie }}</a></td></tr>
-              <tr><td>Head office:</td><td>1st Floor 14-15, Berners Street, London</td></tr>
+              <tr><td>Head office:</td><td>{{company.registered_office_address.address_line_1}},{{company.registered_office_address.locality}}, {{company.registered_office_address.country}} {{company.registered_office_address.postal_code}}</td></tr>
             </tbody>
           </table>
         </div>
@@ -99,7 +100,6 @@
     </div>
 
   </main>
-
 
   <div class="row register-links">
     <div class="large-7 columns large-offset-4"">

@@ -61,7 +61,15 @@ def rating(premises, food_premises_rating):
     data = resp.json()
     latitude = data['entry']['latitude']
     longitude = data['entry']['longitude']
-    return render_template('rating.html', rating=rating, food_premises_rating=food_premises_rating, latitude=latitude, longitude=longitude, premises=premises, company='07228130')
+
+    #get company address
+    company_number = premises['entry']['business']
+    company, address = _get_company_details(company_number.split(':')[1])
+
+    current_app.logger.info(company)
+    current_app.logger.info(address)
+
+    return render_template('rating.html', rating=rating, food_premises_rating=food_premises_rating, latitude=latitude, longitude=longitude, premises=premises, company=company, address=address)
 
 
 def _food_premises_search(name):
@@ -123,6 +131,28 @@ def _attach_ratings(food_premises):
         food_premises['inspection_history'] = ratings[1:]
     else:
         food_premises['last_inspection'] = {}
+
+
+def _get_company_details(company_number):
+    co_house_api_key = current_app.config['COMPANIES_HOUSE_API_KEY']
+    headers = {'Authorization': 'Basic '+co_house_api_key}
+    try:
+        url = 'https://api.companieshouse.gov.uk/company/%s' % company_number
+        res = requests.get(url, headers=headers)
+        res.raise_for_status()
+        current_app.logger.info(res.json())
+        company = res.json()
+        url = 'https://api.companieshouse.gov.uk/company/%s/registered-office-address' % company_number
+        res = requests.get(url, headers=headers)
+        res.raise_for_status()
+        address = res.json()
+        return (company, address)
+    except Exception as e:
+        current_app.logger.info(e)
+        return (canned_company_data, {})
+
+
+canned_company_data = {"can_file": True, "has_insolvency_history": False, "jurisdiction": "england-wales", "sic_codes": ["56101"], "etag": "ae17d388cfeae6306b800bceebb044a3e97ffcfe", "registered_office_address": {"country": "United Kingdom", "locality": "London", "postal_code": "W1T 3LJ", "address_line_1": "1st Floor 14-15 Berners Street"}, "undeliverable_registered_office_address": False, "annual_return": {"next_due": "2016-05-18", "last_made_up_to": "2015-04-20", "next_made_up_to": "2016-04-20", "overdue": False}, "company_number": "07228130", "last_full_members_list_date": "2015-04-20", "date_of_creation": "2010-04-20", "has_been_liquidated": False, "accounts": {"next_due": "2016-03-31", "last_accounts": {"type": "full", "made_up_to": "2014-06-29"}, "accounting_reference_date": {"day": "30", "month": "06"}, "next_made_up_to": "2015-06-30", "overdue": False}, "company_name": "BYRON HAMBURGERS LIMITED", "company_status": "active", "has_charges": True, "type": "ltd"}
 
 
 # dummy API
