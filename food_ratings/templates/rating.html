@@ -93,6 +93,7 @@
               <tr><td>Company name:</td><td>{{company.company_name}}</td></tr>
               <tr><td>Company number:</td><td><a href="https://beta.companieshouse.gov.uk/company/{{premises.entry.business | format_curie }}">{{premises.entry.business | format_curie }}</a></td></tr>
               <tr><td>Head office:</td><td>{{company.registered_office_address.address_line_1}},{{company.registered_office_address.locality}}, {{company.registered_office_address.country}} {{company.registered_office_address.postal_code}}</td></tr>
+              <tr><td>Industry:</td><td><a href="http://industry.openregister.org/industry/{{company.industry }}">{{company.industry}}</a> — {{company['industry-name']}}</td></tr>
             </tbody>
           </table>
         </div>
@@ -103,14 +104,15 @@
 
   <div class="row register-links">
     <div class="large-7 columns large-offset-4"">
-        <h2 class="heading-small">This page uses data from open registers.</h2>
+        <h2 class="heading-small">This page uses data from the following registers:</h2>
         <div id="registers" class="content">
           <ul>
+            <li><a href="http://food-premises-rating.openregister.org/food-premises-rating/{{rating.entry['food-premises-rating']}}">Food premises rating</a></li>
             <li><a href="http://food-premises.openregister.org/food-premises/{{premises.entry['food-premises']}}">Food premises</a></li>
             <li><a href="http://premises.prod.openregister.org/premises/{{premises.entry['premises']}}">Premises</a></li>
-            <li><a href="http://food-premises-rating.openregister.org/food-premises-rating/{{rating.entry['food-premises-rating']}}">Food premises rating register</a></li>
-            <li><a href="http://local-authority.openregister.org/local-authority/{{premises.entry['local-authority']}}">Local authority register</a></li>
-            <li><a href="http://company.openregister.org/company/{{premises.entry.business | format_curie }}">Company register</a></li>
+            <li><a href="http://local-authority.openregister.org/local-authority/{{premises.entry['local-authority']}}">Local authority</a></li>
+            <li><a href="http://company.openregister.org/company/{{premises.entry.business | format_curie }}">Company</a></li>
+            <li><a href="http://industry.openregister.org/industry/{{company.industry }}">Industry</a></li>
         </ul>
       </div>
     </div>

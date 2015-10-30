@@ -9,6 +9,7 @@ class Config(object):
     PREMISES_REGISTER = os.environ.get('PREMISES_REGISTER')
     COMPANY_REGISTER = os.environ.get('COMPANY_REGISTER')
     ADDRESS_REGISTER = os.environ.get('ADDRESS_REGISTER')
+    INDUSTRY_REGISTER = os.environ.get('INDUSTRY_REGISTER') or 'http://industry.prod.openregister.org'
     POSTCODE_REGISTER = os.environ.get('POSTCODE_REGISTER')
     FOOD_PREMISES_REGISTER = os.environ.get('FOOD_PREMISES_REGISTER')
     FOOD_PREMISES_RATING_REGISTER = os.environ.get('FOOD_PREMISES_RATING_REGISTER')

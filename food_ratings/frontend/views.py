@@ -132,6 +132,12 @@ def _attach_ratings(food_premises):
     else:
         food_premises['last_inspection'] = {}
 
+def _attach_industry(company):
+    company['industry'] = company["sic_codes"][0]
+    industry_register = current_app.config['INDUSTRY_REGISTER']
+    industry_url = '%s/industry/%s.json' % (industry_register, company['industry'])
+    data = requests.get(industry_url).json()
+    company['industry-name'] = data['entry']['name']
 
 def _get_company_details(company_number):
     co_house_api_key = current_app.config['COMPANIES_HOUSE_API_KEY']
@@ -146,9 +152,11 @@ def _get_company_details(company_number):
         res = requests.get(url, headers=headers)
         res.raise_for_status()
         address = res.json()
+        _attach_industry(company)
         return (company, address)
     except Exception as e:
         current_app.logger.info(e)
+        _attach_industry(canned_company_data)
         return (canned_company_data, {})
 
 
