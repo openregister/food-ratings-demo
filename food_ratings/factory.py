@@ -62,4 +62,36 @@ def register_filters(app):
             address_lines.append(s['postcode'])
         return ", ".join(address_lines)
 
+
+    def format_inspection(s):
+        ratings_map = {"0": "Urgent improvement needed", "1": "Major improvement needed", "2": "Improvement needed", "3": "Generally satisfactory", "4": "Good", "5": "Very good"}
+        if s['last_inspection']:
+            rating_value = s['last_inspection']['food_premises_rating_value']
+            return "Rating: %s - %s" % (rating_value, ratings_map[rating_value])
+        else:
+            return "Not inspected yet"
+
+    def format_curie(s):
+        return s.split(":")[1]
+
+    def format_reply(s):
+        return s.replace('\n', '<br/>')
+
+
+    # def format_inspection_date(s):
+    #     inspection_lines = []
+    #     if s['last_inspection']:
+    #         out = "Last inspection: %s" % s['last_inspection']['start_date']
+    #         inspection_lines.append(out)
+    #         out = "Rating: %s" % s['last_inspection']['food_premises_rating_value']
+    #         inspection_lines.append(out)
+    #     else:
+    #         inspection_lines.append("Not inspected yet")
+
+    #     return " ".join(inspection_lines)
+
     app.jinja_env.filters['format_address'] = format_address
+    app.jinja_env.filters['format_inspection'] = format_inspection
+    app.jinja_env.filters['format_curie'] = format_curie
+    app.jinja_env.filters['format_reply'] = format_reply
+

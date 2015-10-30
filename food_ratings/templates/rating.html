@@ -10,24 +10,24 @@
 
     <div class="row back">
       <div class="large-1 columns">
-      <p><a href="{{url_for('frontend.search', location=location, business=business)}}"><i class="fa fa-caret-left"></i>Back</a></p>
+      <p><a href="{{url_for('frontend.search', location=location, establishment_name=premises.entry.name)}}"><i class="fa fa-caret-left"></i>Back</a></p>
       </div>
     </div>
 
     <div class="row rating-header">
       <div class="large-12 columns">
-        <h1 class="heading-large"><span class="business">{{rating.name}}</span><span class="rating-id"> - {{fhrs_id}}</span></h1>
+        <h1 class="heading-large"><span class="business">{{premises.entry.name}}</span><span class="rating-id"> - {{food_premises_rating}}</span></h1>
       </div>
     </div>
 
     <div class="row rating">
       <div class="large-4 columns">
-        <p><img src="{{ asset_path }}images/ratings/rating-1.png"/></p>
+        <p><img src="{{ asset_path }}images/ratings/rating-{{rating.entry['food-premises-rating-value']}}.png"/></p>
       </div>
       <div class="large-7 columns end">
         <h2 class="heading-medium">Premises details</h2>
         <p>{{rating.premises}}</p>
-        <p>Premises number: <a href="http://www.2010.voa.gov.uk/rli/en/advanced/assessment-history/2010/{{premises}}">{{premises}}</a></p>
+        <p>Premises number: <a href="http://www.2010.voa.gov.uk/rli/en/advanced/assessment-history/2010/{{premises}}">{{premises.entry.premises}}</a></p>
         <h2 class="heading-medium">Local authority</h2>
         <img src="/static/images/camden-logo-black.png" class="local-authority-logo">
         <div id="map-canvas"></div>
@@ -44,42 +44,25 @@
         <h2 class="heading-small">Rating breakdown:</h2>
         <ul>
           <li><h3 class="heading-small">Hygienic food handling</h3>
-          Hygienic handling of food including preparation, cooking,
-          re-heating, cooling and storage
-          Result: Improvement necessary
+          <p>Hygienic handling of food including preparation, cooking,
+          re-heating, cooling and storage. <span class="inspection-result">Result: Improvement necessary</span></p>
           </li>
           <li>
           <h3 class="heading-small">Cleanliness and condition of facilities and building</h3>
-          Cleanliness and condition of facilities and building (including
+          <p>Cleanliness and condition of facilities and building (including
           having appropriate layout, ventilation, hand washing facilities
-          and pest control) to enable good food hygiene
-          Result: Major improvement necessary
+          and pest control) to enable good food hygiene. <span class="inspection-result">Result: Major improvement necessary</span></p>
           </li>
           <li><h3 class="heading-small">Management of food safety</h3>
-          System or checks in place to ensure that food sold or served is
+          <p>System or checks in place to ensure that food sold or served is
           safe to eat, evidence that staff know about food safety, and the
           food safety officer has confidence that standards will be
-          maintained in future.
-          Result: Major improvement necessary
+          maintained in future. <span class="inspection-result">Result: Major improvement necessary</span></p>
           </li>
         </ul>
         <h2 class="heading-medium">What the business says</h2>
         <div class="response">
-          <p>“I agree with the inspection results but have since carried out the
-          following improvements:</p>
-
-          <p>The staff have been trained/retrained/given instruction/are under
-          revised supervisory arrangements</p>
-
-          <p>The points raised by the Environmental Health Officers were acted
-          upon immediately and we look forward to welcoming them back for
-          a re-inspection when we will be delighted to demonstrate our high
-          standards at this restaurant.</p>
-
-          <p>The conditions found at the time of the inspection were not typical
-          of the normal conditions mainained at the establishment and arose
-          because: Historically, cooking temperature records were available.
-          However, on the day of the inspection this was not the case.”</p>
+          <p>{{rating.entry['food-premises-rating-reply'] | format_reply | safe }}</p>
         </div>
 
         <h2 class="heading-medium">Company details</h2>
@@ -88,7 +71,7 @@
           <table class="company-details">
             <tbody>
               <tr><td>Company name:</td><td>BYRON HAMBURGERS LIMITED</td></tr>
-              <tr><td>Company number:</td><td><a href="https://beta.companieshouse.gov.uk/company/{{company}}">{{company}}</a></td></tr>
+              <tr><td>Company number:</td><td><a href="https://beta.companieshouse.gov.uk/company/{{premises.entry.business | format_curie }}">{{premises.entry.business | format_curie }}</a></td></tr>
               <tr><td>Head office:</td><td>1st Floor 14-15, Berners Street, London</td></tr>
             </tbody>
           </table>

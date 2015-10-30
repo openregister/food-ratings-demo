@@ -283,6 +283,9 @@ img.local-authority-logo {
   background-position: 5px 8px;
 }
 
+.inspection-result {
+  font-weight: bold;
+}
 @media only screen and (min-width: 40.063em) and (max-width: 64em)  {
   fieldset.filters {
     margin: 1.125rem 0;
