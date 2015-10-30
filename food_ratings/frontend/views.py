@@ -53,6 +53,8 @@ def rating(food_premises_rating):
     premises = _get_food_premises(food_premises_id)
     rating = _get_rating(food_premises_rating)
     _attach_address(premises['entry'])
+    _attach_local_authority(premises['entry'])
+
     # get lat long from postcode
     postcode_register = current_app.config['POSTCODE_REGISTER']
     url = '%s/postcode/%s.json' % (postcode_register, premises['entry']['postcode'])
@@ -74,7 +76,6 @@ def _get_food_premises(food_premises):
     rating_register = current_app.config['FOOD_PREMISES_REGISTER']
     url = '%s/food-premises/%s.json' % (rating_register, food_premises)
     resp = requests.get(url)
-    current_app.logger.info(url)
     return resp.json()
 
 
@@ -82,7 +83,6 @@ def _get_rating(food_premises):
     rating_register = current_app.config['FOOD_PREMISES_RATING_REGISTER']
     url = '%s/food-premises-rating/%s.json' % (rating_register, food_premises)
     resp = requests.get(url)
-    current_app.logger.info(url)
     return resp.json()
 
 
@@ -91,8 +91,6 @@ def _attach_address(food_premises):
     premises_url = '%s/premises/%s.json' % (premises_register, food_premises['premises'])
     resp = requests.get(premises_url)
     uprn = resp.json()['entry']['address']
-    current_app.logger.info(resp.json()['entry']['address'])
-
     address_register = current_app.config['ADDRESS_REGISTER']
     address_url = '%s/address/%s.json' % (address_register, uprn)
     resp = requests.get(address_url).json()
@@ -103,11 +101,12 @@ def _attach_address(food_premises):
 
 
 def _attach_local_authority(food_premises):
-    local_authority_register = current_app.config['LOCAL_AUTHORITY_REGISTER']
-    la_url = '%s/local-authority/%s.json' % (local_authority_register, food_premises['local_authority'])
-    data = requests.get(la_url).json()
-    food_premises['local-authority-name'] = data['entry']['name']
-    food_premises['local-authority-website'] = data['entry']['website']
+    if food_premises.get('local-authority'):
+        local_authority_register = current_app.config['LOCAL_AUTHORITY_REGISTER']
+        la_url = '%s/local-authority/%s.json' % (local_authority_register, food_premises['local-authority'])
+        data = requests.get(la_url).json()
+        food_premises['local-authority-name'] = data['entry']['name']
+        # food_premises['local-authority-website'] = data['entry']['website']
 
 
 def _attach_latest_rating(food_premises):
@@ -124,12 +123,12 @@ def _attach_latest_rating(food_premises):
 
 # dummy API
 # old stub api data
-@frontend.route('/industry.openregister.org/industry/<code>')
-def industry_register(code):
-    return jsonify({
-        'industry':'56101',
-        'name':'Licensed restaurants'
-    })
+# @frontend.route('/industry.openregister.org/industry/<code>')
+# def industry_register(code):
+#     return jsonify({
+#         'industry':'56101',
+#         'name':'Licensed restaurants'
+#     })
 
 # @frontend.route('/food-premises-rating.openregister.org/food-premises-rating/759332-2014-04-09')
 # def food_premises_rating_register_1(food_premises_rating):

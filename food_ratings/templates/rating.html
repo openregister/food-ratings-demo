@@ -8,6 +8,10 @@
 
   <main id="content" role="main">
 
+      <p>PREMISES: {{premises}}</p>
+
+      <p>RATINGS: {{rating}}</p>
+
     <div class="row back">
       <div class="large-1 columns">
       <p><a href="{{url_for('frontend.search', location=location, establishment_name=premises.entry.name)}}"><i class="fa fa-caret-left"></i>Back</a></p>
@@ -80,6 +84,22 @@
     </div>
 
   </main>
+
+
+  <div class="row register-links">
+    <div class="large-7 columns large-offset-4"">
+        <h2 class="heading-small">This page uses data from open registers.</h2>
+        <div id="registers" class="content">
+          <ul>
+            <li><a href="http://food-premises.openregister.org/food-premises/{{premises.entry['food-premises']}}">Food premises</a></li>
+            <li><a href="http://premises.prod.openregister.org/premises/{{premises.entry['premises']}}">Premises</a></li>
+            <li><a href="http://food-premises-rating.openregister.org/food-premises-rating/{{rating.entry['food-premises-rating']}}">Food premises rating register</a></li>
+            <li><a href="http://local-authority.openregister.org/local-authority/{{premises.entry['local-authority']}}">Local authority register</a></li>
+            <li><a href="http://company.openregister.org/company/{{premises.entry.business | format_curie }}">Company register</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   {% include "footer.html" %}
 {% endblock %}
