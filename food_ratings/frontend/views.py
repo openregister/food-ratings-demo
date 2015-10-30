@@ -35,8 +35,9 @@ def index():
 
 @frontend.route('/search')
 def search():
-    form = SearchForm(business=request.args.get('establishment_name'), location=request.args.get('location'))
     establishment_name = request.args.get('establishment_name')
+    form = SearchForm(establishment_name=establishment_name, location=request.args.get('location'))
+
     results = [item['fields'] for item in _food_premises_search(establishment_name)]
     for food_premises in results:
         _attach_address(food_premises)

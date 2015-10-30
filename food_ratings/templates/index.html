@@ -18,15 +18,15 @@
     <div class="row">
        <div class="large-6 columns">
         <h2 class="heading-medium">Find a rating</h2>
-        <p>Search using a business name, an ID number or by area. The ID number can be found on the sticker displayed in the food premises.</p>
+        <p>Search using the name of a restaurant</p>
       </div>
     </div>
 
     <div class="row search">
       <form class="form" action="{{url_for('frontend.index')}}" method="POST">
         <div class="large-5 columns">
-          <label class="form-label" for="name-or-id">Establishment name
-            <span class="form-hint">For example, Kebab World</span>
+          <label class="form-label" for="name-or-id">Establishment
+            <span class="form-hint">For example, Byron</span>
           </label>
           {{ form.establishment_name(class_="form-control", id="name-or-id")|safe }}
           {% if form.establishment_name.errors %}
@@ -35,8 +35,9 @@
             {% endfor %}
           {% endif %}
         </div>
+        <!--
         <div class="large-5 columns">
-          <label class="form-label" for="area-or-postcode">Area or postcode
+         <label class="form-label" for="area-or-postcode">Area or postcode
             <span class="form-hint">For example, SW4 or Croydon</span>
           </label>
           {{ form.location(class_="form-control", id="area-or-postcode")|safe }}
@@ -46,6 +47,7 @@
             {% endfor %}
           {% endif %}
         </div>
+        -->
         <div class="large-2 columns">
           <input type="submit" value="Find ratings"  class="button tiny fsa-button"/>
         </div>
