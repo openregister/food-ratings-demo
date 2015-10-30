@@ -128,7 +128,7 @@ def _attach_ratings(food_premises):
     #TODO proper sort by start date
     if len(ratings) > 0:
         food_premises['last_inspection'] = ratings[0]
-        food_premises['inspection_history'] = ratings[1:]
+        food_premises['inspection_history'] = ratings
     else:
         food_premises['last_inspection'] = {}
 
