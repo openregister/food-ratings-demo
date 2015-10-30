@@ -47,7 +47,7 @@
               <a href="#history">View inspection history</a>
               <div id="history" class="content">
                 {% for inspection in premises.entry.inspection_history %}
-                  <p>{{inspection.start_date}} - {{ inspection | format_inspection}}</p>
+                  <p><a href="{{inspection['food_premises_rating']}}">{{inspection.start_date}}</a> — {{ inspection | format_inspection}}</p>
                 {% endfor %}
               </div>
             </li>
