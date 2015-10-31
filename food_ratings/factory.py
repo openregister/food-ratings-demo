@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 '''The app module, containing the app factory function.'''
 from flask import Flask, render_template
+import re
 
 def asset_path_context_processor():
     return {'asset_path': '/static/'}
@@ -81,7 +82,8 @@ def register_filters(app):
 
     # TBD: translate markdown..
     def format_reply(s):
-        return s.replace('\\n','<br/>\n').replace('\n', '<br/>')
+        r = s.replace('\\n','<br/>\n').replace('\n', '<br/>')
+        return re.sub('(<br/> *)+$', '', r)
 
 
     # def format_inspection_date(s):
