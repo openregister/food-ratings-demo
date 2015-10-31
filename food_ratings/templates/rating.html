@@ -41,19 +41,24 @@
     <div class="row" class="inspection-details">
       <div class="large-7 columns large-offset-4">
         <h2 class="heading-medium">Inspection details</h2>
-        <h2 class="heading-small">Date of last inspection</h2>
-        <p>{{rating.entry['start-date']}}</p>
+
         <h2 class="heading-small">Food Hygiene Rating</h2>
         <p class="food-hygiene-rating">{{ premises.entry | format_inspection }}</p>
+
+        <h2 class="heading-small">Date of inspection</h2>
+        <p>{{rating.entry['start-date']}}</p>
         {% if premises.entry.inspection_history %}
         <p>
           <ul class="accordion" data-accordion>
             <li class="accordion-navigation">
-              <a href="#history">View inspection history</a>
+              <a href="#history">+ full inspection history</a>
               <div id="history" class="content">
+                <dl>
                 {% for inspection in premises.entry.inspection_history %}
-                  <p><a href="{{inspection['food_premises_rating']}}">{{inspection.start_date}}</a> — {{ inspection | format_inspection}}</p>
+                  <dt><a href="{{inspection['food_premises_rating']}}">{{inspection.start_date}}</a><dt>
+                  <dd>{{ inspection | format_inspection}}</dd>
                 {% endfor %}
+                </dl>
               </div>
             </li>
           </ul>
@@ -64,20 +69,20 @@
         <h2 class="heading-small">Rating breakdown:</h2>
         <ul>
           <li><h3 class="heading-small">Hygienic food handling</h3>
-            <span class="inspection-result">Result: Improvement necessary</span>
+            <span class="inspection-result">Score: {{ rating.entry['food-premises-rating-hygiene-score'] }} — Improvement necessary</span>
             <p>Hygienic handling of food including preparation, cooking,
           re-heating, cooling and storage. </p>
           </li>
           <li>
             <h3 class="heading-small">Cleanliness and condition of facilities and building</h3>
-            <span class="inspection-result">Result: Major improvement necessary</span>
+            <span class="inspection-result">Score: {{ rating.entry['food-premises-rating-structural-score'] }} — Major improvement necessary</span>
             <p>Cleanliness and condition of facilities and building (including
           having appropriate layout, ventilation, hand washing facilities
           and pest control) to enable good food hygiene.</p>
           </li>
           <li>
             <h3 class="heading-small">Management of food safety</h3>
-            <span class="inspection-result">Result: Major improvement necessary</span>
+            <span class="inspection-result">Score: {{ rating.entry['food-premises-rating-confidence-in-management-score'] }} — Major improvement necessary</span>
             <p>System or checks in place to ensure that food sold or served is
           safe to eat, evidence that staff know about food safety, and the
           food safety officer has confidence that standards will be
