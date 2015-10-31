@@ -256,7 +256,7 @@ hr {
 }
 
 .food-hygiene-rating {
-  font-weight: bold
+  font-weight: normal;
 }
 
 .business {
@@ -288,7 +288,7 @@ img.local-authority-logo {
 }
 
 .inspection-result {
-  font-weight: bold;
+  font-weight: normal;
 }
 @media only screen and (min-width: 40.063em) and (max-width: 64em)  {
   fieldset.filters {

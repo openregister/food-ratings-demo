@@ -47,7 +47,6 @@ def register_extensions(app):
 
     # requests_cache.install_cache('registers_cache', backend='redis', expire_after=300, connection=cache)
 
-
 def register_filters(app):
 
     def format_address(s):
@@ -65,14 +64,17 @@ def register_filters(app):
 
     def format_inspection(s):
         ratings_map = {"0": "Urgent improvement needed", "1": "Major improvement needed", "2": "Improvement needed", "3": "Generally satisfactory", "4": "Good", "5": "Very good"}
+
         if s.get('last_inspection'):
             rating_value = s['last_inspection']['food_premises_rating_value']
-            return "Rating: %s - %s" % (rating_value, ratings_map[rating_value])
         elif s.get('food_premises_rating_value'):
             rating_value = s['food_premises_rating_value']
-            return "Rating: %s - %s" % (rating_value, ratings_map[rating_value])
+        elif s.get('food-premises-rating-value'):
+            rating_value = s['food-premises-rating-value']
         else:
-            return "Not inspected yet"
+            rating_value = "Awaiting Inspection"
+
+        return "Rating: %s — %s" % (rating_value, ratings_map.get(rating_value, "Not yet known"))
 
     def format_curie(s):
         return s.split(":")[1]
