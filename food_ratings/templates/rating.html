@@ -32,8 +32,8 @@
       </div>
     </div>
 
-    <div class="row rating">
-      <div class="large-7 columns large-offset-4">
+    <div class="row map-canvas">
+      <div class="large-9 large-offset-4 columns">
         <div id="map-canvas"></div>
       </div>
     </div>
@@ -134,6 +134,7 @@ var map = L.map('map-canvas').setView([ {{ latitude }}, {{longitude }}], 17);
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
+map.scrollWheelZoom.disable();
 L.marker([ {{ latitude }}, {{longitude }}]).addTo(map)
 </script>
 {% endblock %}
