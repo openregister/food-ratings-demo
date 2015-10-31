@@ -15,42 +15,17 @@
 
     <div class="row rating-header">
       <div class="large-12 columns">
-        <h1 class="heading-large"><span class="business">{{premises.entry.name}}</span><span class="rating-id"> - {{food_premises_rating}}</span></h1>
+        <h1 class="heading-large"><span class="business">{{premises.entry.name}}</span>
+        <p>{{ premises['entry'] | format_address }} <p>
       </div>
     </div>
 
     <div class="row rating">
       <div class="large-4 columns">
+
         <p><img src="{{ asset_path }}images/ratings/rating-{{rating.entry['food-premises-rating-value']}}.png"/></p>
-      </div>
-      <div class="large-7 columns end">
-        <h2 class="heading-medium">Premises details</h2>
-        <p>{{rating.premises}}</p>
-        <p>Premises number: <a href="http://www.2010.voa.gov.uk/rli/en/advanced/assessment-history/2010/{{premises.entry.premises}}">{{premises.entry.premises}}</a></p>
-        <h2 class="heading-medium">Local authority</h2>
-        <img src="/static/images/camden-logo-black.png" class="local-authority-logo">
-      </div>
-    </div>
 
-    <div class="row map-canvas">
-      <div class="large-9 large-offset-4 columns">
-        <div id="map-canvas"></div>
-      </div>
-    </div>
-
-    <div class="row" class="inspection-details">
-      <div class="large-7 columns large-offset-4">
-        <h2 class="heading-medium">Inspection details</h2>
-
-        <h2 class="heading-small">Food Hygiene Rating</h2>
-        <p class="food-hygiene-rating">{{ rating.entry | format_inspection }}</p>
-
-        <h2 class="heading-small">Date of inspection</h2>
         <p>{{rating.entry['start-date']}}</p>
-
-        <h2 class="heading-small">Inspected by</h2>
-        <p><a href="{{ food_premises['local-authority-website'] }}">{{food_premises['local-authority-name']}} Council</a></p>
-
         {% if premises.entry.inspection_history %}
         <p>
           <ul class="accordion" data-accordion>
@@ -68,30 +43,65 @@
           </ul>
         </p>
         {% endif %}
+      </div>
 
-        <h2 class="heading-small">Rating breakdown:</h2>
-        <ul>
-          <li><h3 class="heading-small">Hygienic food handling</h3>
-            <p>Hygienic handling of food including preparation, cooking,
-          re-heating, cooling and storage. </p>
-            <span class="inspection-result">Score: {{ rating.entry['food-premises-rating-hygiene-score'] }} — Improvement necessary</span>
-          </li>
-          <li>
-            <h3 class="heading-small">Cleanliness and condition of facilities and building</h3>
-            <p>Cleanliness and condition of facilities and building (including
-          having appropriate layout, ventilation, hand washing facilities
-          and pest control) to enable good food hygiene.</p>
-            <span class="inspection-result">Score: {{ rating.entry['food-premises-rating-structural-score'] }} — Major improvement necessary</p>
-          </li>
-          <li>
-            <h3 class="heading-small">Management of food safety</h3>
-            <p>System or checks in place to ensure that food sold or served is
-          safe to eat, evidence that staff know about food safety, and the
-          food safety officer has confidence that standards will be
-          maintained in future.</p>
-            <span class="inspection-result">Score: {{ rating.entry['food-premises-rating-confidence-in-management-score'] }} — Major improvement necessary</span>
-          </li>
-        </ul>
+      <div class="large-8 columns end">
+        <div id="map-canvas"></div>
+
+        <h2 class="heading-medium">Local authority</h2>
+        <p>
+          <a href="{{ food_premises['local-authority-website'] }}" title="{{food_premises['local-authority-name']}}"><img src="/static/images/camden-logo-black.png" class="local-authority-logo"></a>
+        </p>
+
+        <dl>
+          <dt>Food premises number</dt>
+          <dd><a href="">{{ rating.entry['food-premises'] }}</a></dd>
+
+          <dt>Business premises number</dt>
+          <dd><a href="http://www.2010.voa.gov.uk/rli/en/advanced/assessment-history/2010/{{premises.entry.premises}}">{{premises.entry.premises}}</a></dd>
+        </dl>
+
+        <h2 class="heading-medium">Business</h2>
+          <dl>
+            <dt>Company name</dt>
+            <dd>{{company.company_name}}</dd>
+            <dt>Company number</dt>
+            <dd><a href="https://beta.companieshouse.gov.uk/company/{{premises.entry.business | format_curie }}">{{premises.entry.business | format_curie }}</a></dd>
+            <dt>Head office</dt>
+            <dd>{{company.registered_office_address.address_line_1}},{{company.registered_office_address.locality}}, {{company.registered_office_address.country}} {{company.registered_office_address.postal_code}}</dd>
+            <dt>Industry</dt>
+            <dd><a href="http://industry.openregister.org/industry/{{company.industry }}">{{company.industry}}</a> — {{company['industry-name']}}</dd>
+          </dl>
+
+
+
+        <h2 class="heading-medium">Inspection</h2>
+        <dl>
+          <dt>Inspected by</dt>
+          <dd><a href="{{ food_premises['local-authority-website'] }}">{{food_premises['local-authority-name']}} Council</a></dd>
+
+          <dt>Inspection number</dt>
+          <dd><a href="">{{food_premises_rating}}</a></dd>
+
+          <dt>Date of inspection</dt>
+          <dd>{{rating.entry['start-date']}}</dd>
+
+          <dt>Food hygiene rating</dt>
+          <dd class="food-hygiene-rating">{{ rating.entry | format_inspection }}</dd>
+
+          <dt>Hygienic food handling</dt>
+          <dd>Hygienic handling of food including preparation, cooking, re-heating, cooling and storage.</dd>
+
+          <dd class="inspection-result">Score: {{ rating.entry['food-premises-rating-hygiene-score'] }} — Improvement necessary</dd>
+          <dt>Cleanliness and condition of facilities and building</dt>
+          <dd>Cleanliness and condition of facilities and building (including having appropriate layout, ventilation, hand washing facilities and pest control) to enable good food hygiene.</dd>
+          <dd class="inspection-result">Score: {{ rating.entry['food-premises-rating-structural-score'] }} — Major improvement necessary</dd>
+
+          <dt>Management of food safety</dt>
+          <dd>System or checks in place to ensure that food sold or served is safe to eat, evidence that staff know about food safety, and the food safety officer has confidence that standards will be maintained in future.</dd>
+          <dd class="inspection-result">Score: {{ rating.entry['food-premises-rating-confidence-in-management-score'] }} — Major improvement necessary</dd>
+        </dl>
+
         {% if rating.entry['food-premises-rating-reply']  %}
         <h2 class="heading-medium">What the business says</h2>
         <div class="response">
@@ -99,37 +109,28 @@
         </div>
         {% endif %}
 
-        <h2 class="heading-medium">Company details</h2>
-        <div class="row">
-          <table class="company-details">
-            <tbody>
-              <tr><td>Company name:</td><td>{{company.company_name}}</td></tr>
-              <tr><td>Company number:</td><td><a href="https://beta.companieshouse.gov.uk/company/{{premises.entry.business | format_curie }}">{{premises.entry.business | format_curie }}</a></td></tr>
-              <tr><td>Head office:</td><td>{{company.registered_office_address.address_line_1}},{{company.registered_office_address.locality}}, {{company.registered_office_address.country}} {{company.registered_office_address.postal_code}}</td></tr>
-              <tr><td>Industry:</td><td><a href="http://industry.openregister.org/industry/{{company.industry }}">{{company.industry}}</a> — {{company['industry-name']}}</td></tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
 
-  </main>
 
-  <div class="row register-links">
-    <div class="large-7 columns large-offset-4"">
+  <div class="row">
+    <div class="large-7 columns"">
         <h2 class="heading-small">This page uses data from the following registers:</h2>
         <div id="registers" class="content">
           <ul>
-            <li><a href="http://food-premises-rating.openregister.org/food-premises-rating/{{rating.entry['food-premises-rating']}}">Food premises rating</a></li>
-            <li><a href="http://food-premises.openregister.org/food-premises/{{premises.entry['food-premises']}}">Food premises</a></li>
-            <li><a href="http://premises.prod.openregister.org/premises/{{premises.entry['premises']}}">Premises</a></li>
-            <li><a href="http://local-authority.openregister.org/local-authority/{{premises.entry['local-authority']}}">Local authority</a></li>
-            <li><a href="http://company.openregister.org/company/{{premises.entry.business | format_curie }}">Company</a></li>
-            <li><a href="http://industry.openregister.org/industry/{{company.industry }}">Industry</a></li>
-        </ul>
-      </div>
+            <li><a href="http://food-premises-rating.openregister.org/food-premises-rating/{{rating.entry['food-premises-rating']}}">Food premises rating register</a></li>
+            <li><a href="http://food-premises.openregister.org/food-premises/{{premises.entry['food-premises']}}">Food premises register</a></li>
+            <li><a href="http://premises.prod.openregister.org/premises/{{premises.entry['premises']}}">Premises register</a></li>
+            <li><a href="http://local-authority.openregister.org/local-authority/{{premises.entry['local-authority']}}">Local authority register</a></li>
+            <li><a href="http://company.openregister.org/company/{{premises.entry.business | format_curie }}">Company register</a></li>
+            <li><a href="http://industry.openregister.org/industry/{{company.industry }}">Industry register</a></li>
+          </ul>
+        </div>
     </div>
   </div>
+
+  </main>
 
   {% include "footer.html" %}
 {% endblock %}
