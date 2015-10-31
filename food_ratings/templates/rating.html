@@ -25,7 +25,7 @@
 
         <p><img src="{{ asset_path }}images/ratings/rating-{{rating.entry['food-premises-rating-value']}}.png"/></p>
 
-        <p>{{rating.entry['start-date']}}</p>
+        <p>{{ rating.entry['start-date'] | format_date }}</p>
         {% if premises.entry.inspection_history %}
         <p>
           <ul class="accordion" data-accordion>
@@ -34,7 +34,7 @@
               <div id="history" class="content">
                 <dl>
                 {% for inspection in premises.entry.inspection_history %}
-                  <dt><a href="{{inspection['food_premises_rating']}}">{{inspection.start_date}}</a><dt>
+                  <dt><a href="{{inspection['food_premises_rating']}}">{{inspection.start_date | format_date}}</a><dt>
                   <dd>{{ inspection | format_inspection}}</dd>
                 {% endfor %}
                 </dl>
@@ -84,7 +84,7 @@
           <dd><a href="">{{food_premises_rating}}</a></dd>
 
           <dt>Date of inspection</dt>
-          <dd>{{rating.entry['start-date']}}</dd>
+          <dd>{{rating.entry['start-date'] | format_date }}</dd>
 
           <dt>Food hygiene rating</dt>
           <dd class="food-hygiene-rating">{{ rating.entry | format_inspection }}</dd>

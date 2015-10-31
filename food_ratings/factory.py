@@ -2,6 +2,7 @@
 '''The app module, containing the app factory function.'''
 from flask import Flask, render_template
 import re
+from datetime import datetime
 
 def asset_path_context_processor():
     return {'asset_path': '/static/'}
@@ -85,6 +86,11 @@ def register_filters(app):
         r = s.replace('\\n','<br/>\n').replace('\n', '<br/>')
         return re.sub('(<br/> *)+$', '', r)
 
+    def format_date(d):
+        try:
+            return datetime.strptime(d, '%Y-%m-%d').strftime('%-d %B %Y')
+        except Exception as e:
+            return ''
 
     # def format_inspection_date(s):
     #     inspection_lines = []
@@ -102,4 +108,5 @@ def register_filters(app):
     app.jinja_env.filters['format_inspection'] = format_inspection
     app.jinja_env.filters['format_curie'] = format_curie
     app.jinja_env.filters['format_reply'] = format_reply
+    app.jinja_env.filters['format_date'] = format_date
 
