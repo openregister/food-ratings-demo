@@ -90,11 +90,13 @@
                 <ul class="result-list">
                   {% for result in results %}
                     <li>
-                      <h2 class="heading-small">{% if result.last_inspection %}<a href="/premises/{{result.food_premises}}/rating/{{result.last_inspection.food_premises_rating}}" class="business">{{result.name}}</a>{% else %}{{result.name}}{% endif %}</h2>
-                      <!-- TODO create an address filter to format address -->
-                        <div>{{result | format_address}} <div>
-                        <div>{{result | format_inspection }} <div>
-                        <p></p>
+                      <h2 class="heading-small">
+                        {% if result.rating %}<a href="/rating/{{result.rating['food-premises-rating']}}" class="business">{{result.name}}</a>
+                        {% else %}{{result.name}}{% endif %}
+                      </h2>
+                      <div>{{ result.address | format_address }}<div>
+                      <div>{{ result.rating | format_inspection }}</div>
+                      <p></p>
                     </li>
                   {% endfor %}
                 </ul>

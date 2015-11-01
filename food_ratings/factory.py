@@ -76,7 +76,7 @@ def register_filters(app):
         else:
             rating_value = "Awaiting Inspection"
 
-        return "Rating: %s — %s" % (rating_value, ratings_map.get(rating_value, "Not yet known"))
+        return "%s — %s" % (rating_value, ratings_map.get(rating_value, "Not yet known"))
 
     def format_curie(s):
         return s.split(":")[1]
@@ -91,18 +91,6 @@ def register_filters(app):
             return datetime.strptime(d, '%Y-%m-%d').strftime('%-d %B %Y')
         except Exception as e:
             return ''
-
-    # def format_inspection_date(s):
-    #     inspection_lines = []
-    #     if s['last_inspection']:
-    #         out = "Last inspection: %s" % s['last_inspection']['start_date']
-    #         inspection_lines.append(out)
-    #         out = "Rating: %s" % s['last_inspection']['food_premises_rating_value']
-    #         inspection_lines.append(out)
-    #     else:
-    #         inspection_lines.append("Not inspected yet")
-
-    #     return " ".join(inspection_lines)
 
     app.jinja_env.filters['format_address'] = format_address
     app.jinja_env.filters['format_inspection'] = format_inspection

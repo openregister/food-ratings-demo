@@ -9,39 +9,42 @@
   <main id="content" role="main">
     <div class="row back">
       <div class="large-1 columns">
-      <p><a href="{{url_for('frontend.search', location=location, establishment_name=premises.entry.name)}}"><i class="fa fa-caret-left"></i>Back</a></p>
+      <p><a href="{{ url_for('frontend.search', location=location, establishment_name=food_premises.name) }}"><i class="fa fa-caret-left"></i>Back</a></p>
       </div>
     </div>
 
     <div class="row rating-header">
       <div class="large-12 columns">
-        <h1 class="heading-large"><span class="business">{{premises.entry.name}}</span>
-        <p>{{ premises['entry'] | format_address }} <p>
+        <h1 class="heading-large">
+        <span class="business">{{ food_premises.name }}</span>
+        <p>{{ address | format_address }} <p>
       </div>
     </div>
 
     <div class="row rating">
       <div class="large-4 columns">
 
-        <p><img src="{{ asset_path }}images/ratings/rating-{{rating.entry['food-premises-rating-value']}}.png"/></p>
+        <p><img src="{{ asset_path }}images/ratings/rating-{{ rating['food-premises-rating-value'] }}.png"/></p>
 
-        <p>{{ rating.entry['start-date'] | format_date }}</p>
-        {% if premises.entry.inspection_history %}
-        <p>
+        <dl>
+        <dt>Inspected on</dt>
+        <dd>{{ rating['start-date'] | format_date }}</dd>
+        </dl>
+
+        {% if ratings %}
           <ul class="accordion" data-accordion>
             <li class="accordion-navigation">
               <a href="#history">+ full inspection history</a>
               <div id="history" class="content">
                 <dl>
-                {% for inspection in premises.entry.inspection_history %}
-                  <dt><a href="{{inspection['food_premises_rating']}}">{{inspection.start_date | format_date}}</a><dt>
-                  <dd>{{ inspection | format_inspection}}</dd>
+                {% for rating in ratings %}
+                  <dt><a href="{{ rating['food-premises-rating'] }}">{{ rating['start-date'] | format_date }}</a><dt>
+                  <dd>{{ rating | format_inspection }}</dd>
                 {% endfor %}
                 </dl>
               </div>
             </li>
           </ul>
-        </p>
         {% endif %}
       </div>
 
@@ -50,62 +53,66 @@
 
         <h2 class="heading-medium">Local authority</h2>
         <p>
-          <a href="{{ food_premises['local-authority-website'] }}" title="{{food_premises['local-authority-name']}}"><img src="/static/images/camden-logo-black.png" class="local-authority-logo"></a>
+          <a href="{{ local_authority['website'] }}" title="{{ local_authority['name'] }}"><img src="/static/images/camden-logo-black.png" class="local-authority-logo"></a>
         </p>
 
         <dl>
           <dt>Food premises number</dt>
-          <dd><a href="">{{ rating.entry['food-premises'] }}</a></dd>
+          <dd><a href="">{{ rating['food-premises'] }}</a></dd>
 
           <dt>Business premises number</dt>
-          <dd><a href="http://www.2010.voa.gov.uk/rli/en/advanced/assessment-history/2010/{{premises.entry.premises}}">{{premises.entry.premises}}</a></dd>
+          <dd><a href="http://www.2010.voa.gov.uk/rli/en/advanced/assessment-history/2010/{{ food_premises.premises}}">{{ food_premises.premises }}</a></dd>
         </dl>
 
+
         <h2 class="heading-medium">Business</h2>
-          <dl>
-            <dt>Company name</dt>
-            <dd>{{company.company_name}}</dd>
-            <dt>Company number</dt>
-            <dd><a href="https://beta.companieshouse.gov.uk/company/{{premises.entry.business | format_curie }}">{{premises.entry.business | format_curie }}</a></dd>
-            <dt>Head office</dt>
-            <dd>{{company.registered_office_address.address_line_1}},{{company.registered_office_address.locality}}, {{company.registered_office_address.country}} {{company.registered_office_address.postal_code}}</dd>
-            <dt>Industry</dt>
-            <dd><a href="http://industry.openregister.org/industry/{{company.industry }}">{{company.industry}}</a> — {{company['industry-name']}}</dd>
-          </dl>
+        <dl>
+          <dt>Company name</dt>
+          <dd>{{ company['name'] }}</dd>
+
+          <dt>Company number</dt>
+          <dd><a href="https://beta.companieshouse.gov.uk/company/{{ food_premises.business | format_curie }}">{{ food_premises.business | format_curie }}</a></dd>
+
+          <dt>Incorporated on</dt>
+          <dd>{{ company['start-date'] | format_date }}</dd>
+
+          <dt>Registered office</dt>
+          <dd>{{ company_address | format_address }}</dd>
+
+          <dt>Industry</dt>
+          <dd>{{ industry['industry'] }} — {{ industry['name'] }}</dd>
+        </dl>
 
 
 
         <h2 class="heading-medium">Inspection</h2>
         <dl>
+          <dt>Date of inspection</dt>
+          <dd>{{rating['start-date'] | format_date }}</dd>
+
           <dt>Inspected by</dt>
-          <dd><a href="{{ food_premises['local-authority-website'] }}">{{food_premises['local-authority-name']}} Council</a></dd>
+          <dd><a href="{{ local_authority['website'] }}">{{ local_authority['name'] }} Council</a></dd>
 
           <dt>Inspection number</dt>
-          <dd><a href="">{{food_premises_rating}}</a></dd>
-
-          <dt>Date of inspection</dt>
-          <dd>{{rating.entry['start-date'] | format_date }}</dd>
+          <dd><a href="/rating/{{ rating['food-premises-rating'] }}">{{ rating['food-premises-rating'] }}</a></dd>
 
           <dt>Food hygiene rating</dt>
-          <dd class="food-hygiene-rating">{{ rating.entry | format_inspection }}</dd>
+          <dd class="food-hygiene-rating">{{ rating | format_inspection }}</dd>
 
           <dt>Hygienic food handling</dt>
-          <dd>Hygienic handling of food including preparation, cooking, re-heating, cooling and storage.</dd>
+          <dd class="inspection-result">{{ rating ['food-premises-rating-hygiene-score'] }} — Improvement necessary</dd>
 
-          <dd class="inspection-result">Score: {{ rating.entry['food-premises-rating-hygiene-score'] }} — Improvement necessary</dd>
           <dt>Cleanliness and condition of facilities and building</dt>
-          <dd>Cleanliness and condition of facilities and building (including having appropriate layout, ventilation, hand washing facilities and pest control) to enable good food hygiene.</dd>
-          <dd class="inspection-result">Score: {{ rating.entry['food-premises-rating-structural-score'] }} — Major improvement necessary</dd>
+          <dd class="inspection-result">{{ rating ['food-premises-rating-structural-score'] }} — Major improvement necessary</dd>
 
           <dt>Management of food safety</dt>
-          <dd>System or checks in place to ensure that food sold or served is safe to eat, evidence that staff know about food safety, and the food safety officer has confidence that standards will be maintained in future.</dd>
-          <dd class="inspection-result">Score: {{ rating.entry['food-premises-rating-confidence-in-management-score'] }} — Major improvement necessary</dd>
+          <dd class="inspection-result">{{ rating ['food-premises-rating-confidence-in-management-score'] }} — Major improvement necessary</dd>
         </dl>
 
-        {% if rating.entry['food-premises-rating-reply']  %}
+        {% if rating['food-premises-rating-reply']  %}
         <h2 class="heading-medium">What the business says</h2>
         <div class="response">
-          <p>{{rating.entry['food-premises-rating-reply'] | format_reply | safe }}</p>
+          <p>{{rating['food-premises-rating-reply'] | format_reply | safe }}</p>
         </div>
         {% endif %}
 
@@ -119,12 +126,13 @@
         <h2 class="heading-small">This page uses data from the following registers:</h2>
         <div id="registers" class="content">
           <ul>
-            <li><a href="http://food-premises-rating.openregister.org/food-premises-rating/{{rating.entry['food-premises-rating']}}">Food premises rating register</a></li>
-            <li><a href="http://food-premises.openregister.org/food-premises/{{premises.entry['food-premises']}}">Food premises register</a></li>
-            <li><a href="http://premises.prod.openregister.org/premises/{{premises.entry['premises']}}">Premises register</a></li>
-            <li><a href="http://local-authority.openregister.org/local-authority/{{premises.entry['local-authority']}}">Local authority register</a></li>
-            <li><a href="http://company.openregister.org/company/{{premises.entry.business | format_curie }}">Company register</a></li>
-            <li><a href="http://industry.openregister.org/industry/{{company.industry }}">Industry register</a></li>
+            <li><a href="http://food-premises-rating.openregister.org/food-premises-rating/{{ rating['food-premises-rating'] }}">Food premises rating register</a></li>
+            <li><a href="http://food-premises.openregister.org/food-premises/{{ food_premises['food-premises'] }}">Food premises register</a></li>
+            <li><a href="http://premises.prod.openregister.org/premises/{{ premises.premises }}">Premises register</a></li>
+            <li><a href="http://local-authority.openregister.org/local-authority/{{ local_authority['local-authority'] }}">Local authority register</a></li>
+            <li><a href="http://company.openregister.org/company/{{ company.company }}">Company register</a></li>
+            <li><a href="http://industry.openregister.org/industry/{{ industry.industry }}">Industry register</a></li>
+            <li><a href="http://address.openregister.org/address/{{ address.address }}">Address register</a></li>
           </ul>
         </div>
     </div>
@@ -139,11 +147,11 @@
 
 <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 <script>
-var map = L.map('map-canvas').setView([ {{ latitude }}, {{longitude }}], 17);
+var map = L.map('map-canvas').setView([ {{ address.latitude }}, {{ address.longitude }}], 17);
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 map.scrollWheelZoom.disable();
-L.marker([ {{ latitude }}, {{longitude }}]).addTo(map)
+L.marker([ {{ address.latitude }}, {{address.longitude }}]).addTo(map)
 </script>
 {% endblock %}
