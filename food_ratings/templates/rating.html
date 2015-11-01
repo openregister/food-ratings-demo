@@ -34,12 +34,12 @@
         {% if ratings %}
           <ul class="accordion" data-accordion>
             <li class="accordion-navigation">
-              <a href="#history">+ full inspection history</a>
+              <a href="#history">+ full rating history</a>
               <div id="history" class="content">
                 <dl>
                 {% for rating in ratings %}
-                  <dt><a href="{{ rating['food-premises-rating'] }}">{{ rating['start-date'] | format_date }}</a><dt>
-                  <dd>{{ rating | format_inspection }}</dd>
+                  <dt>{{ rating['start-date'] | format_date }}</dt>
+                  <dd><a href="{{ rating['food-premises-rating'] }}">{{ rating | format_rating | safe }}</a></dd>
                 {% endfor %}
                 </dl>
               </div>
@@ -97,7 +97,7 @@
           <dd><a href="/rating/{{ rating['food-premises-rating'] }}">{{ rating['food-premises-rating'] }}</a></dd>
 
           <dt>Food hygiene rating</dt>
-          <dd class="food-hygiene-rating">{{ rating | format_inspection }}</dd>
+          <dd class="food-hygiene-rating">{{ rating | format_rating | safe }}</dd>
 
           <dt>Hygienic food handling</dt>
           <dd class="inspection-result">{{ rating ['food-premises-rating-hygiene-score'] }} — Improvement necessary</dd>

@@ -64,19 +64,17 @@ def register_filters(app):
         return ", ".join(address_lines)
 
 
-    def format_inspection(s):
-        ratings_map = {"0": "Urgent improvement needed", "1": "Major improvement needed", "2": "Improvement needed", "3": "Generally satisfactory", "4": "Good", "5": "Very good"}
-
-        if s.get('last_inspection'):
-            rating_value = s['last_inspection']['food_premises_rating_value']
-        elif s.get('food_premises_rating_value'):
-            rating_value = s['food_premises_rating_value']
-        elif s.get('food-premises-rating-value'):
-            rating_value = s['food-premises-rating-value']
-        else:
-            rating_value = "Awaiting Inspection"
-
-        return "%s — %s" % (rating_value, ratings_map.get(rating_value, "Not yet known"))
+    def format_rating(rating):
+        ratings_map = {
+            "0": "— Urgent improvement needed",
+            "1": "— Major improvement needed",
+            "2": "— Improvement needed",
+            "3": "— Generally satisfactory",
+            "4": "— Good",
+            "5": "— Very good"
+        }
+        value = rating.get('food-premises-rating-value', 'Unknown')
+        return "<strong>%s</strong> %s" % (value, ratings_map.get(value, ''))
 
     def format_curie(s):
         return s.split(":")[1]
@@ -93,7 +91,7 @@ def register_filters(app):
             return ''
 
     app.jinja_env.filters['format_address'] = format_address
-    app.jinja_env.filters['format_inspection'] = format_inspection
+    app.jinja_env.filters['format_rating'] = format_rating
     app.jinja_env.filters['format_curie'] = format_curie
     app.jinja_env.filters['format_reply'] = format_reply
     app.jinja_env.filters['format_date'] = format_date

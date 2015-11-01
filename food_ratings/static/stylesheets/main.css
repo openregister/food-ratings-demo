@@ -102,6 +102,19 @@ footer p {
   margin-bottom: 0.5rem;
 }
 
+#history {
+  padding-left: 0;
+}
+
+#history > dl > dd {
+  border-bottom: 1em solid #fff;
+}
+
+#history > dl > dd > a {
+  color: #008CBA !important;
+}
+
+
 ul.accordion {
   margin: 0;
 }
@@ -214,6 +227,11 @@ hr {
   margin-right: 15px;
 }
 
+.result-list a.button.secondary {
+  color: #008CBA !important;
+}
+
+
 .search {
   margin-top: 25px;
   margin-bottom: 30px;
@@ -255,7 +273,8 @@ hr {
   font-weight: normal;
 }
 
-.food-hygiene-rating {
+.food-hygiene-rating,
+.food-hygiene-rating strong {
   font-weight: normal;
 }
 
