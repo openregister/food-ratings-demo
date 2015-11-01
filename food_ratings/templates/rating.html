@@ -123,37 +123,41 @@
 
   <div class="row">
     <div class="large-10 columns"">
-        <h2 class="heading-small">This page uses data from registers</h2>
-        <div id="registers" class="content">
-          <dl>
-            <dt>{{ food_premises | format_register('food-premises') | safe }}</dt>
-            <dd>{{ food_premises | format_entry('food-premises') }}</dd>
+      <h2 class="heading-small">This page uses data from a number of different registers</h2>
+      <ul class="accordion" data-accordion>
+        <li class="accordion-navigation">
+          <a href="#registers">+ register data</a>
+          <div id="registers" class="content">
+            <dl>
+              <dt>{{ food_premises | format_register('food-premises') | safe }}</dt>
+              <dd><a>{{ food_premises | format_entry('food-premises') }}</a></dd>
 
-            <dt>{{ rating | format_register('food-premises-rating') | safe }}</dt>
-            <dd>{{ rating | format_entry('food-premises-rating') }}</dd>
+              <dt>{{ rating | format_register('food-premises-rating') | safe }}</dt>
+              <dd><a>{{ rating | format_entry('food-premises-rating') }}</a></dd>
 
-            <dt>{{ premises | format_register('premises') | safe }}</dt>
-            <dd>{{ premises | format_entry('premises') }}</dd>
+              <dt>{{ premises | format_register('premises') | safe }}</dt>
+              <dd><a>{{ premises | format_entry('premises') }}</a></dd>
 
-            <dt>{{ local_authority | format_register('local-authority') | safe }}</dt>
-            <dd>{{ local_authority | format_entry('local-authority') }}</dd>
+              <dt>{{ local_authority | format_register('local-authority') | safe }}</dt>
+              <dd><a>{{ local_authority | format_entry('local-authority') }}</a></dd>
 
-            <dt>{{ company | format_register('company') | safe }}</dt>
-            <dd>{{ company | format_entry('company') }}</dd>
+              <dt>{{ company | format_register('company') | safe }}</dt>
+              <dd><a>{{ company | format_entry('company') }}</a></dd>
 
-            <dt>{{ industry | format_register('industry') | safe }}</dt>
-            <dd>{{ industry | format_entry('industry') }}</dd>
+              <dt>{{ industry | format_register('industry') | safe }}</dt>
+              <dd><a>{{ industry | format_entry('industry') }}</a></dd>
 
-            <dt>{{ address | format_register('address') | safe }}</dt>
-            <dd>{{ address | format_entry('address') }}</dd>
+              <dt>{{ address | format_register('address') | safe }}</dt>
+              <dd><a>{{ address | format_entry('address') }}</a></dd>
 
-            <dt>{{ company_address | format_register('address') | safe }}</dt>
-            <dd>{{ company_address | format_entry('address') }}</dd>
-          </dl>
-        </div>
+              <dt>{{ company_address | format_register('address') | safe }}</dt>
+              <dd><a>{{ company_address | format_entry('address') }}</a></dd>
+            </dl>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
-
   </main>
 
   {% include "footer.html" %}

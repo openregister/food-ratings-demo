@@ -106,7 +106,8 @@ footer p {
   padding-left: 0;
 }
 
-#history > dl > dd {
+#history > dl > dd,
+#registers > dl > dd {
   border-bottom: 1em solid #fff;
 }
 
