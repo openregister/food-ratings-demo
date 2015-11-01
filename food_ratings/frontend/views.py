@@ -51,7 +51,11 @@ def _index(index, field, value):
 def _entry(register, key):
     url = _config(register, 'register')
     response = _get('%s/%s/%s.json' % (url, register, key))
-    return response.json()['entry']
+    json = response.json()
+    entry = json['entry']
+    entry['hash'] = json['hash']
+    entry['entry-number'] = json['serial-number']
+    return entry
 
 
 @frontend.route('/',  methods=['GET', 'POST'])

@@ -77,7 +77,8 @@ def register_filters(app):
         return "<strong>%s</strong> %s" % (value, ratings_map.get(value, ''))
 
     def format_register(entry, name=''):
-        return '<a href="http://%s.openregister.org/name/%s">%s:%s</a>' % (name, name, name, entry[name])
+        return '<a href="http://%s.prod.openregister.org/%s/%s">%s:%s</a>' % (
+            name, name, entry[name], name, entry[name])
 
     def format_entry(entry, name=''):
         return entry

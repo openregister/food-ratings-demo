@@ -123,30 +123,37 @@
 
   <div class="row">
     <div class="large-10 columns"">
+
       <h2 class="heading-small">This page uses data from a number of different registers</h2>
       <ul class="accordion" data-accordion>
         <li class="accordion-navigation">
           <a href="#registers">+ register data</a>
           <div id="registers" class="content">
             <dl>
+              <h3>Food Standards Agency</h3>
               <dt>{{ food_premises | format_register('food-premises') | safe }}</dt>
               <dd><a>{{ food_premises | format_entry('food-premises') }}</a></dd>
 
               <dt>{{ rating | format_register('food-premises-rating') | safe }}</dt>
               <dd><a>{{ rating | format_entry('food-premises-rating') }}</a></dd>
 
+              <h3>Valuation Office Agency</h3>
               <dt>{{ premises | format_register('premises') | safe }}</dt>
               <dd><a>{{ premises | format_entry('premises') }}</a></dd>
 
+              <h3>Department for Communities and Local Government</h3>
               <dt>{{ local_authority | format_register('local-authority') | safe }}</dt>
               <dd><a>{{ local_authority | format_entry('local-authority') }}</a></dd>
 
+              <h3>Companies House</h3>
               <dt>{{ company | format_register('company') | safe }}</dt>
               <dd><a>{{ company | format_entry('company') }}</a></dd>
 
+              <h3>Office for National Statistics</h3>
               <dt>{{ industry | format_register('industry') | safe }}</dt>
               <dd><a>{{ industry | format_entry('industry') }}</a></dd>
 
+              <h3>Ordnance Survey</h3>
               <dt>{{ address | format_register('address') | safe }}</dt>
               <dd><a>{{ address | format_entry('address') }}</a></dd>
 
