@@ -126,14 +126,11 @@
         <h2 class="heading-small">This page uses data from registers</h2>
         <div id="registers" class="content">
           <dl>
-            <dt>{{ rating | format_register('food-premises-rating') | safe }}</dt>
-            <dd>{{ rating | format_entry('food-premises-rating') }}</dd>
-
             <dt>{{ food_premises | format_register('food-premises') | safe }}</dt>
             <dd>{{ food_premises | format_entry('food-premises') }}</dd>
 
-            <dt>{{ premises | format_register('premises') | safe }}</dt>
-            <dd>{{ premises | format_entry('premises') }}</dd>
+            <dt>{{ rating | format_register('food-premises-rating') | safe }}</dt>
+            <dd>{{ rating | format_entry('food-premises-rating') }}</dd>
 
             <dt>{{ premises | format_register('premises') | safe }}</dt>
             <dd>{{ premises | format_entry('premises') }}</dd>
