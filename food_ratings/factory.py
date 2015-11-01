@@ -76,6 +76,12 @@ def register_filters(app):
         value = rating.get('food-premises-rating-value', 'Unknown')
         return "<strong>%s</strong> %s" % (value, ratings_map.get(value, ''))
 
+    def format_register(entry, name=''):
+        return '<a href="http://%s.openregister.org/name/%s">%s:%s</a>' % (name, name, name, entry[name])
+
+    def format_entry(entry, name=''):
+        return entry
+
     def format_curie(s):
         return s.split(":")[1]
 
@@ -95,4 +101,6 @@ def register_filters(app):
     app.jinja_env.filters['format_curie'] = format_curie
     app.jinja_env.filters['format_reply'] = format_reply
     app.jinja_env.filters['format_date'] = format_date
+    app.jinja_env.filters['format_register'] = format_register
+    app.jinja_env.filters['format_entry'] = format_entry
 

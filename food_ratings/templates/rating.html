@@ -122,18 +122,37 @@
 
 
   <div class="row">
-    <div class="large-7 columns"">
-        <h2 class="heading-small">This page uses data from the following registers:</h2>
+    <div class="large-10 columns"">
+        <h2 class="heading-small">This page uses data from registers</h2>
         <div id="registers" class="content">
-          <ul>
-            <li><a href="http://food-premises-rating.openregister.org/food-premises-rating/{{ rating['food-premises-rating'] }}">Food premises rating register</a></li>
-            <li><a href="http://food-premises.openregister.org/food-premises/{{ food_premises['food-premises'] }}">Food premises register</a></li>
-            <li><a href="http://premises.prod.openregister.org/premises/{{ premises.premises }}">Premises register</a></li>
-            <li><a href="http://local-authority.openregister.org/local-authority/{{ local_authority['local-authority'] }}">Local authority register</a></li>
-            <li><a href="http://company.openregister.org/company/{{ company.company }}">Company register</a></li>
-            <li><a href="http://industry.openregister.org/industry/{{ industry.industry }}">Industry register</a></li>
-            <li><a href="http://address.openregister.org/address/{{ address.address }}">Address register</a></li>
-          </ul>
+          <dl>
+            <dt>{{ rating | format_register('food-premises-rating') | safe }}</dt>
+            <dd>{{ rating | format_entry('food-premises-rating') }}</dd>
+
+            <dt>{{ food_premises | format_register('food-premises') | safe }}</dt>
+            <dd>{{ food_premises | format_entry('food-premises') }}</dd>
+
+            <dt>{{ premises | format_register('premises') | safe }}</dt>
+            <dd>{{ premises | format_entry('premises') }}</dd>
+
+            <dt>{{ premises | format_register('premises') | safe }}</dt>
+            <dd>{{ premises | format_entry('premises') }}</dd>
+
+            <dt>{{ local_authority | format_register('local-authority') | safe }}</dt>
+            <dd>{{ local_authority | format_entry('local-authority') }}</dd>
+
+            <dt>{{ company | format_register('company') | safe }}</dt>
+            <dd>{{ company | format_entry('company') }}</dd>
+
+            <dt>{{ industry | format_register('industry') | safe }}</dt>
+            <dd>{{ industry | format_entry('industry') }}</dd>
+
+            <dt>{{ address | format_register('address') | safe }}</dt>
+            <dd>{{ address | format_entry('address') }}</dd>
+
+            <dt>{{ company_address | format_register('address') | safe }}</dt>
+            <dd>{{ company_address | format_entry('address') }}</dd>
+          </dl>
         </div>
     </div>
   </div>
