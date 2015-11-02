@@ -307,7 +307,8 @@ img.local-authority-logo {
   background-position: 5px 8px;
 }
 
-.inspection-result {
+.inspection-result, 
+.inspection-result strong {
   font-weight: normal;
 }
 @media only screen and (min-width: 40.063em) and (max-width: 64em)  {

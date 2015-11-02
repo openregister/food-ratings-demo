@@ -100,13 +100,13 @@
           <dd class="food-hygiene-rating">{{ rating | format_rating | safe }}</dd>
 
           <dt>Hygienic food handling</dt>
-          <dd class="inspection-result">{{ rating ['food-premises-rating-hygiene-score'] }} — Improvement necessary</dd>
+          <dd class="inspection-result">{{ rating | format_rating_score('food-premises-rating-hygiene-score') | safe }}</dd>
 
           <dt>Cleanliness and condition of facilities and building</dt>
-          <dd class="inspection-result">{{ rating ['food-premises-rating-structural-score'] }} — Major improvement necessary</dd>
+          <dd class="inspection-result">{{ rating | format_rating_score('food-premises-rating-structural-score') | safe }}</dd>
 
           <dt>Management of food safety</dt>
-          <dd class="inspection-result">{{ rating ['food-premises-rating-confidence-in-management-score'] }} — Major improvement necessary</dd>
+          <dd class="inspection-result">{{ rating | format_rating_score('food-premises-rating-confidence-in-management-score') | safe }}</dd>
         </dl>
 
         {% if rating['food-premises-rating-reply']  %}

@@ -63,7 +63,6 @@ def register_filters(app):
             address_lines.append(s['postcode'])
         return ", ".join(address_lines)
 
-
     def format_rating(rating):
         ratings_map = {
             "0": "— Urgent improvement needed",
@@ -75,6 +74,19 @@ def register_filters(app):
         }
         value = rating.get('food-premises-rating-value', 'Unknown')
         return "<strong>%s</strong> %s" % (value, ratings_map.get(value, ''))
+
+    def format_rating_score(rating, field):
+        score_map = {
+            "30": "— Imminent and serious risks.",
+            "25": "— Imminent and serious risks.",
+            "20": "— Widespread and significant risks.",
+            "15": "— Some significant risks.",
+            "10": "— No unacceptable risks identified.",
+            "5":  "— No risks identified.",
+            "0":  "— No risks identified.",
+        }
+        value = rating.get(field, 'Unknown')
+        return "<strong>%s</strong> %s" % (value, score_map.get(value, ''))
 
     def format_register(entry, name=''):
         return '<a href="http://%s.prod.openregister.org/%s/%s">%s:%s</a>' % (
@@ -99,6 +111,7 @@ def register_filters(app):
 
     app.jinja_env.filters['format_address'] = format_address
     app.jinja_env.filters['format_rating'] = format_rating
+    app.jinja_env.filters['format_rating_score'] = format_rating_score
     app.jinja_env.filters['format_curie'] = format_curie
     app.jinja_env.filters['format_reply'] = format_reply
     app.jinja_env.filters['format_date'] = format_date
