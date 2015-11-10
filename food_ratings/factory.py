@@ -3,6 +3,7 @@
 from flask import Flask, render_template
 import re
 from datetime import datetime
+from .frontend.views import _config
 
 def asset_path_context_processor():
     return {'asset_path': '/static/'}
@@ -89,8 +90,8 @@ def register_filters(app):
         return "<strong>%s</strong> %s" % (value, score_map.get(value, ''))
 
     def format_register(entry, name=''):
-        return '<a href="http://%s.prod.openregister.org/%s/%s">%s:%s</a>' % (
-            name, name, entry[name], name, entry[name])
+        return '<a href="%s/%s/%s">%s:%s</a>' % (
+            _config(name, 'register'), name, entry[name], name, entry[name])
 
     def format_entry(entry, name=''):
         return entry
