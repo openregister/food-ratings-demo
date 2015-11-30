@@ -9,6 +9,7 @@ class Config(object):
     PREMISES_REGISTER = os.environ.get('PREMISES_REGISTER')
     COMPANY_REGISTER = os.environ.get('COMPANY_REGISTER')
     ADDRESS_REGISTER = os.environ.get('ADDRESS_REGISTER')
+    LOCATION_REGISTER = os.environ.get('LOCATION_REGISTER')
     INDUSTRY_REGISTER = os.environ.get('INDUSTRY_REGISTER')
     POSTCODE_REGISTER = os.environ.get('POSTCODE_REGISTER')
     FOOD_PREMISES_REGISTER = os.environ.get('FOOD_PREMISES_REGISTER')
@@ -19,11 +20,11 @@ class Config(object):
     COMPANIES_HOUSE_API_KEY = os.environ.get('COMPANIES_HOUSE_API_KEY')
 
 
-
 class DevelopmentConfig(Config):
     DEBUG = True
     WTF_CSRF_ENABLED = False
     SECRET_KEY = os.environ.get('SECRET_KEY', 'local-dev-not-secret')
+
 
 class TestConfig(Config):
     TESTING = True
