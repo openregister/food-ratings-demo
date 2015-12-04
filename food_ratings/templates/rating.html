@@ -181,8 +181,8 @@
 var point = {{ location.point|default('undefined') }};
 if (point) {
   var map = L.map('map-canvas').setView(point, 17);
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
   map.scrollWheelZoom.disable();
   L.marker([ {{ address.latitude }}, {{address.longitude }}]).addTo(map)
