@@ -8,4 +8,4 @@ RUN pip install -r requirements/dev.txt
 
 COPY . /usr/src/app
 
-CMD ["gunicorn", "--config=gunicorn.py", "food_hygiene:app"]
+CMD ["gunicorn", "--config=run-gunicorn.py", "food_hygiene:app"]
