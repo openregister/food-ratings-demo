@@ -84,7 +84,7 @@ def search():
         premises = _entry('premises', result['premises'])
         result['address'] = _entry('address', premises['address'])
         ratings = _index('food-premises-rating', 'food-premises', result['food-premises'])
-        ratings = sorted(ratings, key=lambda item: (item.get('start-date', '')))
+        ratings = sorted(ratings, key=lambda item: (item.get('start-date', '')), reverse=True)
         if ratings:
             result['rating'] = ratings[-1]
 
