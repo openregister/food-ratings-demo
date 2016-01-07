@@ -31,12 +31,15 @@ def _get(url, params=None):
 
 
 # search index has '_' instead of '-' in field names ..
-def _index(index, field, value):
+def _index(index, field, value, sortby = ''):
     url = _config(index, 'search_url')
     params = {
         "q": value,
         "q.options": "{fields:['%s']}" % (field.replace('-', '_'))
     }
+
+    if sortby:
+        params['sort'] = '%s desc' % (sortby.replace('-', '_'))
 
     response = _get(url, params=params)
     results = [hit['fields'] for hit in response.json()['hits']['hit']]
@@ -83,10 +86,9 @@ def search():
     for result in results:
         premises = _entry('premises', result['premises'])
         result['address'] = _entry('address', premises['address'])
-        ratings = _index('food-premises-rating', 'food-premises', result['food-premises'])
-        ratings = sorted(ratings, key=lambda item: (item.get('start-date', '')), reverse=True)
+        ratings = _index('food-premises-rating', 'food-premises', result['food-premises'], 'start-date')
         if ratings:
-            result['rating'] = ratings[-1]
+            result['rating'] = ratings[0]
 
     return render_template('results.html',
         form=form,
