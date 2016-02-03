@@ -6,24 +6,27 @@ food_ratings_demo
 Quickstart
 ----------
 
-Then run the following commands to bootstrap your environment.
+Install Python3 e.g.
 
 ```
-mkvirtualenv --python=/path/to/required/python/version [appname]
+brew install python3
 ```
 
-Install python requirements.
+Install virtualenv e.g.
 ```
+pip3 install virtualenv
+```
+
+Create the virtualenv using python3 in directory venv
+```
+virtualenv --python python3 venv
+```
+
+Activate virtualenv and install python requirements
+```
+source venv/bin/activate
 pip install -r requirements/dev.txt
 ```
-
-Set some environment variables are already set in environment.sh e.g.
-
-```
-export SETTINGS='config.DevelopmentConfig'
-```
-
-If you need more add to the environment.sh file.
 
 Once that this all done you can:
 
