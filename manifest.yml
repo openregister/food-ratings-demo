@@ -12,7 +12,6 @@ applications:
     COMPANY_REGISTER: 'http://company.openregister.org'
     ADDRESS_REGISTER: 'http://address.openregister.org'
     INDUSTRY_REGISTER: 'http://industry.openregister.org'
-    POSTCODE_REGISTER: 'http://postcode.openregister.org'
     FOOD_PREMISES_REGISTER: 'http://food-premises.openregister.org'
     LOCAL_AUTHORITY_REGISTER: 'http://local-authority.openregister.org'
     FOOD_PREMISES_RATING_REGISTER: 'http://food-premises-rating.openregister.org'
