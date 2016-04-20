@@ -10,7 +10,7 @@ applications:
     SETTINGS: 'config.DevelopmentConfig'
     PREMISES_REGISTER: 'http://premises.alpha.openregister.org'
     COMPANY_REGISTER: 'http://company.alpha.openregister.org'
-    ADDRESS_REGISTER: 'http://address.openregister.org'
+    ADDRESS_REGISTER: 'http://address.alpha.openregister.org'
     INDUSTRY_REGISTER: 'http://industry.alpha.openregister.org'
     FOOD_PREMISES_REGISTER: 'http://food-premises.alpha.openregister.org'
     LOCAL_AUTHORITY_REGISTER: 'http://local-authority.alpha.openregister.org'
