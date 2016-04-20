@@ -54,13 +54,13 @@ def register_filters(app):
 
     def format_address(s):
         address_lines = []
-        if s['property']:
+        if 'property' in s:
             address_lines.append(s['property'])
-        if s['street']:
+        if 'street' in s:
             address_lines.append(s['street'])
-        if s['town']:
+        if 'town' in s:
             address_lines.append(s['town'])
-        if s['postcode']:
+        if 'postcode' in s:
             address_lines.append(s['postcode'])
         return ", ".join(address_lines)
 
