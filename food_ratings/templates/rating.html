@@ -53,7 +53,7 @@
 
         <h2 class="heading-medium">Local authority</h2>
         <p>
-          <a href="{{ local_authority['website'] }}" title="{{ local_authority['name'] }}"><img src="/static/images/camden-logo-black.png" class="local-authority-logo"></a>
+          <a href="{{ local_authority_eng['website'] }}" title="{{ local_authority_eng['name'] }}"><img src="/static/images/camden-logo-black.png" class="local-authority-logo"></a>
         </p>
 
         <dl>
@@ -91,7 +91,7 @@
           <dd>{{rating['start-date'] | format_date }}</dd>
 
           <dt>Inspected by</dt>
-          <dd><a href="{{ local_authority['website'] }}">{{ local_authority['name'] }} Council</a></dd>
+          <dd><a href="{{ local_authority_eng['website'] }}">{{ local_authority_eng['name'] }} Council</a></dd>
 
           <dt>Inspection number</dt>
           <dd><a href="/rating/{{ rating['food-premises-rating'] }}">{{ rating['food-premises-rating'] }}</a></dd>
@@ -142,8 +142,8 @@
               <dd><a>{{ premises | format_entry('premises') }}</a></dd>
 
               <h3>Department for Communities and Local Government</h3>
-              <dt>{{ local_authority | format_register('local-authority') | safe }}</dt>
-              <dd><a>{{ local_authority | format_entry('local-authority') }}</a></dd>
+              <dt>{{ local_authority_eng | format_register('local-authority-eng') | safe }}</dt>
+              <dd><a>{{ local_authority_eng | format_entry('local-authority-eng') }}</a></dd>
 
               <h3>Companies House</h3>
               <dt>{{ company | format_register('company') | safe }}</dt>
@@ -159,10 +159,6 @@
 
               <dt>{{ company_address | format_register('address') | safe }}</dt>
               <dd><a>{{ company_address | format_entry('address') }}</a></dd>
-
-              <h3>Cabinet Office</h3>
-              <dt>{{ location | format_register('location') | safe }}</dt>
-              <dd><a>{{ location | format_entry('location') }}</a></dd>
             </dl>
           </li>
         </ul>
@@ -178,14 +174,16 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
 <script>
-var point = {{ location.point|default('undefined') }};
+var point = {{ address.point|default('undefined') }};
 if (point) {
-  var map = L.map('map-canvas').setView(point, 17);
+  var latitude = {{ address.point.split(",")[1].replace("]","") }}
+  var longitude = {{ address.point.split(",")[0].replace("[","") }}
+  var map = L.map('map-canvas').setView([latitude, longitude], 17);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
   map.scrollWheelZoom.disable();
-  L.marker([ {{ address.latitude }}, {{address.longitude }}]).addTo(map)
+  L.marker([latitude, longitude]).addTo(map)
 }
 </script>
 {% endblock %}
