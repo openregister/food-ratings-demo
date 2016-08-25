@@ -4,6 +4,7 @@ from flask import Flask, render_template
 import re
 from datetime import datetime
 from .frontend.views import _config
+from .frontend.views import _entry
 
 def asset_path_context_processor():
     return {'asset_path': '/static/'}
@@ -54,14 +55,15 @@ def register_filters(app):
 
     def format_address(s):
         address_lines = []
-        if 'property' in s:
-            address_lines.append(s['property'])
+        place = ""
+        if 'name' in s:
+            address_lines.append(s['name'])
         if 'street' in s:
-            address_lines.append(s['street'])
-        if 'town' in s:
-            address_lines.append(s['town'])
-        if 'postcode' in s:
-            address_lines.append(s['postcode'])
+            street = _entry('street', s['street'])
+            place = street['place']
+            address_lines.append(street['name'])
+        if place:
+            address_lines.append(_entry('place', place)['name'])
         return ", ".join(address_lines)
 
     def format_rating(rating):

@@ -98,23 +98,23 @@ def rating(food_premises_rating):
     food_premises = _entry('food-premises', rating['food-premises'])
     premises = _entry('premises', food_premises['premises'])
     address = _entry('address', premises['address'])
-    location = _entry('location', 'food-premises:' + rating['food-premises'])
-    local_authority = _entry('local-authority', food_premises['local-authority'])
+    food_authority = _entry('food-authority', food_premises['food-authority'])
+    organisation = food_authority['organisation']
+    local_authority_eng = _entry('local-authority-eng', organisation.split(':')[1])
     ratings = _index('food-premises-rating', 'food-premises', food_premises['food-premises'])
 
     company_number = food_premises['business']
     company = _entry('company', company_number.split(':')[1])
     industry = _entry('industry', company['industry'])
-    company_address = _entry('address', company['registered-office'])
+    company_address = _entry('address', company['address'])
 
-    return render_template('rating.html', 
+    return render_template('rating.html',
         rating=rating,
         ratings=ratings,
         food_premises=food_premises,
         premises=premises,
         address=address,
-        location=location,
-        local_authority=local_authority,
+        local_authority_eng=local_authority_eng,
         company=company,
         company_address=company_address,
         industry=industry)
