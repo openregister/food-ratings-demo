@@ -156,9 +156,33 @@
               <h3>Ordnance Survey</h3>
               <dt>{{ address | format_register('address') | safe }}</dt>
               <dd><a>{{ address | format_entry('address') }}</a></dd>
+              
+              {% if address_street %}
+              <dt>{{ address_street | format_register('street') | safe }}</dt>
+              <dd><a>{{ address_street | format_entry('street') }}</a></dd>
+              {% endif %}
 
+              {% if address_street_place %}
+              <dt>{{ address_street_place | format_register('place') | safe }}</dt>
+              <dd><a>{{ address_street_place | format_entry('place') }}</a></dd>
+              {% endif %}
+              
               <dt>{{ company_address | format_register('address') | safe }}</dt>
               <dd><a>{{ company_address | format_entry('address') }}</a></dd>
+              
+              {% if company_address_street %}
+              <dt>{{ company_address_street | format_register('street') | safe }}</dt>
+              <dd><a>{{ company_address_street | format_entry('street') }}</a></dd>
+              {% endif %}
+              
+              {% if company_address_street_place %}
+              <dt>{{ company_address_street_place | format_register('place') | safe }}</dt>
+              <dd><a>{{ company_address_street_place | format_entry('place') }}</a></dd>
+              {% endif %}
+
+              <h3>Government Digital Service</h3>
+              <dt>{{ food_authority | format_register('food-authority') | safe }}</dt>
+              <dd><a>{{ food_authority | format_entry('food-authority') }}</a></dd>
             </dl>
           </li>
         </ul>
