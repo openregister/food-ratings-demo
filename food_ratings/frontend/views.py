@@ -56,7 +56,6 @@ def _entry(register, key):
     response = _get('%s/record/%s.json' % (url, key))
     return response.json()
 
-
 @frontend.route('/',  methods=['GET', 'POST'])
 def index():
     form = SearchForm()
@@ -98,6 +97,9 @@ def rating(food_premises_rating):
     food_premises = _entry('food-premises', rating['food-premises'])
     premises = _entry('premises', food_premises['premises'])
     address = _entry('address', premises['address'])
+    address_street = _entry('street', address['street']) if address and 'street' in address else None
+    address_street_place = _entry('place', address_street['place']) if address_street and 'place' in address_street else None
+
     food_authority = _entry('food-authority', food_premises['food-authority'])
     organisation = food_authority['organisation']
     local_authority_eng = _entry('local-authority-eng', organisation.split(':')[1])
@@ -107,6 +109,8 @@ def rating(food_premises_rating):
     company = _entry('company', company_number.split(':')[1])
     industry = _entry('industry', company['industry'])
     company_address = _entry('address', company['address'])
+    company_address_street = _entry('street', company_address['street']) if company_address and 'street' in company_address else None
+    company_address_street_place = _entry('place', company_address_street['place']) if company_address_street and 'place' in company_address_street else None
 
     return render_template('rating.html',
         rating=rating,
@@ -114,7 +118,11 @@ def rating(food_premises_rating):
         food_premises=food_premises,
         premises=premises,
         address=address,
+        address_street=address_street,
+        address_street_place=address_street_place,
         local_authority_eng=local_authority_eng,
         company=company,
         company_address=company_address,
+        company_address_street=company_address_street,
+        company_address_street_place=company_address_street_place,
         industry=industry)
