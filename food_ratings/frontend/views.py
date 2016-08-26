@@ -125,4 +125,5 @@ def rating(food_premises_rating):
         company_address=company_address,
         company_address_street=company_address_street,
         company_address_street_place=company_address_street_place,
-        industry=industry)
+        industry=industry,
+        food_authority=food_authority)
