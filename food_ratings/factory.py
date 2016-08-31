@@ -53,17 +53,14 @@ def register_extensions(app):
 
 def register_filters(app):
 
-    def format_address(s):
+    def format_address(address_bundle):
         address_lines = []
-        place = ""
-        if 'name' in s:
-            address_lines.append(s['name'])
-        if 'street' in s:
-            street = _entry('street', s['street'])
-            place = street['place']
-            address_lines.append(street['name'])
-        if place:
-            address_lines.append(_entry('place', place)['name'])
+        if "address" in address_bundle:
+            address_lines.append(address_bundle.get("address").get("name"))
+        if "street" in address_bundle:
+            address_lines.append(address_bundle.get("street").get("name"))
+        if "place" in address_bundle:
+            address_lines.append(address_bundle.get("place").get("name"))
         return ", ".join(address_lines)
 
     def format_rating(rating):
