@@ -81,18 +81,20 @@ def _load_cookie_from_request(cookie):
 
 @frontend.route('/',  methods=['GET', 'POST'])
 def index():
+    resp = None
     form = SearchForm()
     if form.validate_on_submit():
         establishment_name = form.data.get('establishment_name', '').strip().lower()
         location = form.data.get('location', '').strip().lower()
         try:
-            return redirect(url_for('.search', establishment_name=establishment_name, location=location))
+            resp = make_response(redirect(url_for('.search', establishment_name=establishment_name, location=location)))
         except Exception as e:
             message = 'There was a problem searching for: %s' % establishment_name
             flash(message)
             abort(500)
-
-    resp = make_response(render_template('index.html', form=form))
+    else:
+        resp = make_response(render_template('index.html', form=form))
+    
     for cookie in request.cookies:
         resp.set_cookie(cookie, '', expires=0)
 
@@ -104,47 +106,68 @@ def search():
     name = request.args.get('establishment_name')
     form = SearchForm(establishment_name=name, location=request.args.get('location'))
 
-    results = _index('food-premises', 'name', name)
+    cpfx = 'main_'
 
-    for result in results:
-        premises = _entry('premises', result['premises'])
-        result['address_bundle'] = _address_bundle(premises['address'])
+    results = []
+    cookie_json = {}
+    for food_premises_rating_cookie in request.cookies:
+        if food_premises_rating_cookie.startswith(cpfx):
+            cookie_result = request.cookies.get(food_premises_rating_cookie)
+            try:
+                cookie_json = json.loads(cookie_result)
+                results.append(cookie_json)
+            except Exception as e:
+                current_app.logger.warn(food_premises_rating_cookie)
+                current_app.logger.warn(e)
 
-        ratings = _index('food-premises-rating', 'food-premises', result['food-premises'], 'start-date')
-        if ratings:
-            result['rating'] = ratings[0]
+    set_cookies = False
+
+    if not results:
+        set_cookies = True
+        results = _index('food-premises', 'name', name)
+
+        for result in results:
+            premises = _entry('premises', result['premises'])
+            result['address_bundle'] = _address_bundle(premises['address'])
+
+            ratings = _index('food-premises-rating', 'food-premises', result['food-premises'], 'start-date')
+            if ratings:
+                result['rating'] = ratings[0]
+
+    # results = sorted(results, key=lambda x: x.get('food-premises'))
 
     resp = make_response(render_template('results.html', form=form, results=results))
-    for result in results:
-        if 'rating' in result:
-            resp.set_cookie(result.get('rating').get('food-premises-rating'), json.dumps(result))
+    
+    if set_cookies:
+        for result in results:
+            if 'rating' in result:
+                resp.set_cookie(cpfx+result.get('rating').get('food-premises-rating'), json.dumps(result))
         
     return resp
 
 
-
-
 @frontend.route('/rating/<food_premises_rating>')
 def rating(food_premises_rating):
-    cookie_json = _load_cookie_from_request(food_premises_rating)
-        
-
-    rating = _entry('food-premises-rating', food_premises_rating)
-    food_premises = _entry('food-premises', rating['food-premises'])
-    premises = _entry('premises', food_premises['premises'])
+    cookie_json = _load_cookie_from_request('main_'+food_premises_rating)
     
-    address_bundle = cookie_json.get('address_bundle') or _address_bundle(premises['address'])
+    cpfx = 'detail_'+food_premises_rating
 
-    food_authority = _entry('food-authority', food_premises['food-authority'])
+    rating = _load_cookie_from_request(cpfx+'_rating') or _entry('food-premises-rating', food_premises_rating)
+    food_premises = _load_cookie_from_request(cpfx+'_food_premises') or _entry('food-premises', rating['food-premises'])
+    premises = _load_cookie_from_request(cpfx+'_premises') or _entry('premises', food_premises['premises'])
+    
+    address_bundle = _load_cookie_from_request(cpfx+'_address_bundle') or cookie_json.get('address_bundle') or _address_bundle(premises['address'])
+
+    food_authority = _load_cookie_from_request(cpfx+'_food_authority') or _entry('food-authority', food_premises['food-authority'])
     organisation = food_authority['organisation']
-    local_authority_eng = _entry('local-authority-eng', organisation.split(':')[1])
-    ratings = _index('food-premises-rating', 'food-premises', food_premises['food-premises'])
+    local_authority_eng = _load_cookie_from_request(cpfx+'_local_authority_eng') or _entry('local-authority-eng', organisation.split(':')[1])
+    ratings = _load_cookie_from_request(cpfx+'_ratings') or _index('food-premises-rating', 'food-premises', food_premises['food-premises'])
 
     company_number = food_premises['business']
-    company = _entry('company', company_number.split(':')[1])
-    industry = _entry('industry', company['industry'])
+    company = _load_cookie_from_request(cpfx+'_company') or _entry('company', company_number.split(':')[1])
+    industry = _load_cookie_from_request(cpfx+'_industry') or _entry('industry', company['industry'])
     
-    company_address_bundle = _address_bundle(company['address'])
+    company_address_bundle = _load_cookie_from_request(cpfx+'_company_address_bundle') or _address_bundle(company['address'])
 
     resp = make_response(render_template('rating.html',
         rating=rating,
@@ -157,5 +180,16 @@ def rating(food_premises_rating):
         company_address_bundle=company_address_bundle,
         industry=industry,
         food_authority=food_authority))
+
+    resp.set_cookie(cpfx+'_rating', json.dumps(rating))
+    resp.set_cookie(cpfx+'_ratings', json.dumps(ratings))
+    resp.set_cookie(cpfx+'_food_premises', json.dumps(food_premises))
+    resp.set_cookie(cpfx+'_premises', json.dumps(premises))
+    resp.set_cookie(cpfx+'_address_bundle', json.dumps(address_bundle))
+    resp.set_cookie(cpfx+'_local_authority_eng', json.dumps(local_authority_eng))
+    resp.set_cookie(cpfx+'_company', json.dumps(company))
+    resp.set_cookie(cpfx+'_company_address_bundle', json.dumps(company_address_bundle))
+    resp.set_cookie(cpfx+'_industry', json.dumps(industry))
+    resp.set_cookie(cpfx+'_food_authority', json.dumps(food_authority))
 
     return resp
