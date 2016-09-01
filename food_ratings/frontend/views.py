@@ -16,9 +16,10 @@ from flask import (
 )
 
 from food_ratings.frontend.forms import SearchForm
+from requests_futures.sessions import FuturesSession
+from concurrent.futures import Future
 
 frontend = Blueprint('frontend', __name__, template_folder='templates')
-
 
 def _config(name, suffix):
     var = '%s_%s' % (name, suffix)
@@ -32,7 +33,7 @@ def _get(url, params=None):
     return response
 
 # search index has '_' instead of '-' in field names ..
-def _index(index, field, value, sortby = ''):
+def _index(index, field, value, sortby=''):
     url = _config(index, 'search_url')
     params = {
         "q": value,
@@ -57,6 +58,20 @@ def _entry(register, key):
     response = _get('%s/record/%s.json' % (url, key))
     return response.json()
 
+def _entry_async(register, key, session):
+    register = _config(register, 'register')
+    url = "%s/record/%s.json" % (register, key)
+    current_app.logger.info("ASYNC GET: " + url)
+    return session.get(url)
+
+def _unpack_async(async_entry):
+    if isinstance(async_entry, Future):
+        result = async_entry.result().json()
+        current_app.logger.info("ASYNC result: " + json.dumps(result))
+        return result
+    else:
+        return async_entry
+
 def _address_bundle(address):
     address = _entry('address', address)
     address_street = _entry('street', address['street']) if address and 'street' in address else None
@@ -67,19 +82,8 @@ def _address_bundle(address):
         "place": address_street_place
     }
 
-def _load_cookie_from_request(cookie):
-    cookie_json = {}
-    if cookie in request.cookies:
-        cookie_result = request.cookies.get(cookie)
-        try:
-            cookie_json = json.loads(cookie_result)
-        except Exception as e:
-            current_app.logger.info("Json could not parse '%s' cookie: %s" % (cookie, e.message))
 
-    return cookie_json
-
-
-@frontend.route('/',  methods=['GET', 'POST'])
+@frontend.route('/', methods=['GET', 'POST'])
 def index():
     resp = None
     form = SearchForm()
@@ -94,7 +98,7 @@ def index():
             abort(500)
     else:
         resp = make_response(render_template('index.html', form=form))
-    
+
     for cookie in request.cookies:
         resp.set_cookie(cookie, '', expires=0)
 
@@ -105,7 +109,7 @@ def index():
 def search():
     name = request.args.get('establishment_name')
     form = SearchForm(establishment_name=name, location=request.args.get('location'))
-
+    session = FuturesSession(max_workers=12)
     cpfx = 'main_'
 
     results = []
@@ -121,52 +125,101 @@ def search():
                 current_app.logger.warn(e)
 
     set_cookies = False
-
     if not results:
         set_cookies = True
         results = _index('food-premises', 'name', name)
 
         for result in results:
             premises = _entry('premises', result['premises'])
-            result['address_bundle'] = _address_bundle(premises['address'])
+            result['address_bundle'] = {
+                'address': _entry_async('address', premises['address'], session)
+            }
 
             ratings = _index('food-premises-rating', 'food-premises', result['food-premises'], 'start-date')
             if ratings:
+                result['ratings'] = ratings
                 result['rating'] = ratings[0]
+
+        def _resolve_address_level(result, addr_level_key, next_level_key=None):
+            for result in results:
+                address_part = _unpack_async(result.get('address_bundle').get(addr_level_key))
+                result['address_bundle'][addr_level_key] = address_part
+
+                if next_level_key:
+                    result['address_bundle'][next_level_key] = _entry_async(next_level_key, address_part[next_level_key], session) if address_part and next_level_key in address_part else None
+
+
+        _resolve_address_level(result, 'address', 'street')
+        _resolve_address_level(result, 'street', 'place')
+        _resolve_address_level(result, 'place')
 
     results = sorted(results, key=lambda x: x.get('food-premises'))
     resp = make_response(render_template('results.html', form=form, results=results))
-    
+
     if set_cookies:
         for result in results:
             if 'rating' in result:
                 resp.set_cookie(cpfx+result.get('rating').get('food-premises-rating'), json.dumps(result))
-        
+
     return resp
 
 
 @frontend.route('/rating/<food_premises_rating>')
 def rating(food_premises_rating):
-    cookie_json = _load_cookie_from_request('main_'+food_premises_rating)
-    
-    cpfx = 'detail_'+food_premises_rating
 
-    rating = _load_cookie_from_request(cpfx+'_rating') or _entry('food-premises-rating', food_premises_rating)
-    food_premises = _load_cookie_from_request(cpfx+'_food_premises') or _entry('food-premises', rating['food-premises'])
-    premises = _load_cookie_from_request(cpfx+'_premises') or _entry('premises', food_premises['premises'])
-    
-    address_bundle = _load_cookie_from_request(cpfx+'_address_bundle') or cookie_json.get('address_bundle') or _address_bundle(premises['address'])
+    def _load_cookie_from_request(cookie):
+        cookie_json = {}
+        if cookie in request.cookies:
+            cookie_result = request.cookies.get(cookie)
+            try:
+                cookie_json = json.loads(cookie_result)
+            except Exception as e:
+                current_app.logger.info("Json could not parse '%s' cookie: %s" % (cookie, e.message))
+        return cookie_json
 
-    food_authority = _load_cookie_from_request(cpfx+'_food_authority') or _entry('food-authority', food_premises['food-authority'])
-    organisation = food_authority['organisation']
-    local_authority_eng = _load_cookie_from_request(cpfx+'_local_authority_eng') or _entry('local-authority-eng', organisation.split(':')[1])
-    ratings = _load_cookie_from_request(cpfx+'_ratings') or _index('food-premises-rating', 'food-premises', food_premises['food-premises'])
+    def _get_data_from_cookies(cookie_key, check_main_cookie=False):
+        data = _load_cookie_from_request("%s_%s" % (cpfx, cookie_key))
+        if not data and check_main_cookie:
+            data = main_cookie_json.get(cookie_key)
+        return data
+
+    def _get_data(cookie_key, register, entry_key, use_async=False, check_main_cookie=False):
+        data = _get_data_from_cookies(cookie_key, check_main_cookie)
+        if not data:
+            data = _entry_async(register, entry_key, session) if use_async else _entry(register, entry_key)
+        return data
+
+
+    cpfx = 'detail_' + food_premises_rating
+    main_cookie_json = _load_cookie_from_request('main_'+food_premises_rating)
+    session = FuturesSession(max_workers=10)
+
+    rating = _get_data('rating', 'food-premises-rating', food_premises_rating, use_async=True)
+
+    food_premises_no = main_cookie_json.get("food-premises")
+    if not food_premises_no:
+        rating = _unpack_async(rating)
+        food_premises_no = rating['food-premises']
+    food_premises = _get_data('food_premises', 'food-premises', food_premises_no)
+    premises = _get_data('premises', 'premises', food_premises['premises'], use_async=True)
 
     company_number = food_premises['business']
-    company = _load_cookie_from_request(cpfx+'_company') or _entry('company', company_number.split(':')[1])
-    industry = _load_cookie_from_request(cpfx+'_industry') or _entry('industry', company['industry'])
-    
-    company_address_bundle = _load_cookie_from_request(cpfx+'_company_address_bundle') or _address_bundle(company['address'])
+    company = _get_data('company', 'company', company_number.split(':')[1])
+    industry = _get_data('industry', 'industry', company['industry'], use_async=True)
+
+    food_authority = _get_data('food_authority', 'food-authority', food_premises['food-authority'])
+    organisation = food_authority['organisation']
+    local_authority_eng = _get_data('local_authority_eng', 'local-authority-eng', organisation.split(':')[1], use_async=True)
+
+    ratings = _get_data_from_cookies('ratings', check_main_cookie=True) or _index('food-premises-rating', 'food-premises', food_premises['food-premises'])
+    company_address_bundle = _get_data_from_cookies('company_address_bundle') or _address_bundle(company['address'])
+
+    premises = _unpack_async(premises)
+    address_bundle = _get_data_from_cookies('address_bundle', check_main_cookie=True) or _address_bundle(premises['address'])
+
+    industry = _unpack_async(industry)
+    local_authority_eng = _unpack_async(local_authority_eng)
+    rating = _unpack_async(rating)
 
     resp = make_response(render_template('rating.html',
         rating=rating,

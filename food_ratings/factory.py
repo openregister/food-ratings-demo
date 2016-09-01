@@ -55,11 +55,11 @@ def register_filters(app):
 
     def format_address(address_bundle):
         address_lines = []
-        if "address" in address_bundle:
+        if address_bundle.get("address"):
             address_lines.append(address_bundle.get("address").get("name"))
-        if "street" in address_bundle:
+        if address_bundle.get("street"):
             address_lines.append(address_bundle.get("street").get("name"))
-        if "place" in address_bundle:
+        if address_bundle.get("place"):
             address_lines.append(address_bundle.get("place").get("name"))
         return ", ".join(address_lines)
 
