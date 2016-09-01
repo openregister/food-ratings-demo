@@ -134,8 +134,7 @@ def search():
             if ratings:
                 result['rating'] = ratings[0]
 
-    # results = sorted(results, key=lambda x: x.get('food-premises'))
-
+    results = sorted(results, key=lambda x: x.get('food-premises'))
     resp = make_response(render_template('results.html', form=form, results=results))
     
     if set_cookies:
