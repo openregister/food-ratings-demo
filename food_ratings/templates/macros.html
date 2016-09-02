@@ -1,0 +1,6 @@
+{% macro register_item_info(name, value) -%}
+  {% if value %}
+    <dt>{{ value | format_register(name) | safe }}</dt>
+    <dd><a>{{ value | format_entry(name) }}</a></dd>
+  {% endif %}
+{%- endmacro %}

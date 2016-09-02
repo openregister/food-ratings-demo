@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "macros.html" as macros %}
 
 {% block head_end %}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
@@ -17,7 +18,7 @@
       <div class="large-12 columns">
         <h1 class="heading-large">
         <span class="business">{{ food_premises.name }}</span>
-        <p>{{ address | format_address }} <p>
+        <p>{{ address_bundle | format_address }} <p>
       </div>
     </div>
 
@@ -77,7 +78,7 @@
           <dd>{{ company['start-date'] | format_date }}</dd>
 
           <dt>Registered office</dt>
-          <dd>{{ company_address | format_address }}</dd>
+          <dd>{{ company_address_bundle | format_address }}</dd>
 
           <dt>Industry</dt>
           <dd>{{ industry['industry'] }} — {{ industry['name'] }}</dd>
@@ -131,58 +132,32 @@
           <div id="registers" class="content">
             <dl>
               <h3>Food Standards Agency</h3>
-              <dt>{{ food_premises | format_register('food-premises') | safe }}</dt>
-              <dd><a>{{ food_premises | format_entry('food-premises') }}</a></dd>
-
-              <dt>{{ rating | format_register('food-premises-rating') | safe }}</dt>
-              <dd><a>{{ rating | format_entry('food-premises-rating') }}</a></dd>
+              {{ macros.register_item_info('food-premises', food_premises) }}
+              {{ macros.register_item_info('food-premises-rating', rating) }}
 
               <h3>Valuation Office Agency</h3>
-              <dt>{{ premises | format_register('premises') | safe }}</dt>
-              <dd><a>{{ premises | format_entry('premises') }}</a></dd>
+              {{ macros.register_item_info('premises', premises) }}
 
               <h3>Department for Communities and Local Government</h3>
-              <dt>{{ local_authority_eng | format_register('local-authority-eng') | safe }}</dt>
-              <dd><a>{{ local_authority_eng | format_entry('local-authority-eng') }}</a></dd>
+              {{ macros.register_item_info('local-authority-eng', local_authority_eng) }}
 
               <h3>Companies House</h3>
-              <dt>{{ company | format_register('company') | safe }}</dt>
-              <dd><a>{{ company | format_entry('company') }}</a></dd>
+              {{ macros.register_item_info('company', company) }}
 
               <h3>Office for National Statistics</h3>
-              <dt>{{ industry | format_register('industry') | safe }}</dt>
-              <dd><a>{{ industry | format_entry('industry') }}</a></dd>
-
+              {{ macros.register_item_info('industry', industry) }}
+              
               <h3>Ordnance Survey</h3>
-              <dt>{{ address | format_register('address') | safe }}</dt>
-              <dd><a>{{ address | format_entry('address') }}</a></dd>
-              
-              {% if address_street %}
-              <dt>{{ address_street | format_register('street') | safe }}</dt>
-              <dd><a>{{ address_street | format_entry('street') }}</a></dd>
-              {% endif %}
+              {{ macros.register_item_info('address', address_bundle.get('address')) }}
+              {{ macros.register_item_info('street', address_bundle.get('street')) }}
+              {{ macros.register_item_info('place', address_bundle.get('place')) }}
 
-              {% if address_street_place %}
-              <dt>{{ address_street_place | format_register('place') | safe }}</dt>
-              <dd><a>{{ address_street_place | format_entry('place') }}</a></dd>
-              {% endif %}
-              
-              <dt>{{ company_address | format_register('address') | safe }}</dt>
-              <dd><a>{{ company_address | format_entry('address') }}</a></dd>
-              
-              {% if company_address_street %}
-              <dt>{{ company_address_street | format_register('street') | safe }}</dt>
-              <dd><a>{{ company_address_street | format_entry('street') }}</a></dd>
-              {% endif %}
-              
-              {% if company_address_street_place %}
-              <dt>{{ company_address_street_place | format_register('place') | safe }}</dt>
-              <dd><a>{{ company_address_street_place | format_entry('place') }}</a></dd>
-              {% endif %}
+              {{ macros.register_item_info('address', company_address_bundle.get('address')) }}
+              {{ macros.register_item_info('street', company_address_bundle.get('street')) }}
+              {{ macros.register_item_info('place', company_address_bundle.get('place')) }}
 
               <h3>Government Digital Service</h3>
-              <dt>{{ food_authority | format_register('food-authority') | safe }}</dt>
-              <dd><a>{{ food_authority | format_entry('food-authority') }}</a></dd>
+              {{ macros.register_item_info('food-authority', food_authority) }}
             </dl>
           </li>
         </ul>
@@ -198,6 +173,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
 <script>
+{% set address = address_bundle.get('address') %}
 var point = {{ address.point|default('undefined') }};
 if (point) {
   var latitude = {{ address.point.split(",")[1].replace("]","") }}
