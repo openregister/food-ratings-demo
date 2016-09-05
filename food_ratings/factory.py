@@ -5,6 +5,8 @@ import re
 from datetime import datetime
 from .frontend.views import _config
 from .frontend.views import _entry
+from flask.ext.cache import Cache
+import food_ratings.modules.caching as caching
 
 def asset_path_context_processor():
     return {'asset_path': '/static/'}
@@ -36,34 +38,17 @@ def register_blueprints(app):
     app.register_blueprint(frontend)
 
 def register_extensions(app):
-    pass
-    # from redis import Redis
-    # import requests
-    # import requests_cache
-    # from urllib.parse import urlparse
-
-    # redis_url = app.config.get('REDIS_URL')
-    # if redis_url:
-    #     url = urlparse(redis_url)
-    #     cache = Redis(host=url.hostname, port=url.port, password=url.password)
-    # else:
-    #     cache = Redis() # local dev default
-
-    # requests_cache.install_cache('registers_cache', backend='redis', expire_after=300, connection=cache)
+    caching.init_cache(app)
 
 def register_filters(app):
-
-    def format_address(s):
+    def format_address(address_bundle):
         address_lines = []
-        place = ""
-        if 'name' in s:
-            address_lines.append(s['name'])
-        if 'street' in s:
-            street = _entry('street', s['street'])
-            place = street['place']
-            address_lines.append(street['name'])
-        if place:
-            address_lines.append(_entry('place', place)['name'])
+        if address_bundle.get("address"):
+            address_lines.append(address_bundle.get("address").get("name"))
+        if address_bundle.get("street"):
+            address_lines.append(address_bundle.get("street").get("name"))
+        if address_bundle.get("place"):
+            address_lines.append(address_bundle.get("place").get("name"))
         return ", ".join(address_lines)
 
     def format_rating(rating):
