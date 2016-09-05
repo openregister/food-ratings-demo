@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-import requests, sys, os
-sys.path.append('..')
+import requests
 
 from flask import (
     render_template,
@@ -20,7 +19,7 @@ from food_ratings.frontend.forms import SearchForm
 from requests_futures.sessions import FuturesSession
 from concurrent.futures import Future
 
-import food_ratings.modules.caching as caching
+import food_ratings.frontend.caching as caching
 
 frontend = Blueprint('frontend', __name__, template_folder='templates')
 

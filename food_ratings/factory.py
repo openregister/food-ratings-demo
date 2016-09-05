@@ -6,7 +6,7 @@ from datetime import datetime
 from .frontend.views import _config
 from .frontend.views import _entry
 from flask.ext.cache import Cache
-import food_ratings.modules.caching as caching
+from .frontend.caching import init_cache
 
 def asset_path_context_processor():
     return {'asset_path': '/static/'}
@@ -38,7 +38,7 @@ def register_blueprints(app):
     app.register_blueprint(frontend)
 
 def register_extensions(app):
-    caching.init_cache(app)
+    init_cache(app)
 
 def register_filters(app):
     def format_address(address_bundle):
