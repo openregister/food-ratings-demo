@@ -91,7 +91,7 @@
                   {% for result in results %}
                     <li>
                       <h2 class="heading-small">{{ result.name }}</h2>
-                      <p>{{ result.address | format_address }}<p>
+                      <p>{{ result.address_bundle | format_address }}<p>
                       {% if result.rating %}
                       <p><a class="button secondary" href="/rating/{{result.rating['food-premises-rating']}}" class="business">{{ result.rating | format_rating | safe }}</a></p>
                       {% endif %}
@@ -152,7 +152,6 @@
 
 <script>
   var initialize = function () {
-
     var mapCanvas = document.getElementById('map-canvas'),
         coordinates = new google.maps.LatLng(0,0),
         mapOptions = {
@@ -171,7 +170,6 @@
             title: "Byron"
         });
     };
-
     $(document).ready(function(){
         initialize();
     });
