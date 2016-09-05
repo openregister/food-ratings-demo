@@ -215,15 +215,15 @@ def rating(food_premises_rating):
         industry=industry,
         food_authority=food_authority))
 
-    _set_cache(cpfx+'_food_premises_rating', json.dumps(rating))
-    _set_cache(cpfx+'_ratings', json.dumps(ratings))
-    _set_cache(cpfx+'_food_premises', json.dumps(food_premises))
-    _set_cache(cpfx+'_premises', json.dumps(premises))
-    _set_cache(cpfx+'_address_bundle', json.dumps(address_bundle))
-    _set_cache(cpfx+'_local_authority_eng', json.dumps(local_authority_eng))
-    _set_cache(cpfx+'_company', json.dumps(company))
-    _set_cache(cpfx+'_company_address_bundle', json.dumps(company_address_bundle))
-    _set_cache(cpfx+'_industry', json.dumps(industry))
-    _set_cache(cpfx+'_food_authority', json.dumps(food_authority))
+    _set_cache(_as_detail_key('food_premises_rating'), json.dumps(rating))
+    _set_cache(_as_detail_key('ratings'), json.dumps(ratings))
+    _set_cache(_as_detail_key('food_premises'), json.dumps(food_premises))
+    _set_cache(_as_detail_key('premises'), json.dumps(premises))
+    _set_cache(_as_detail_key('address_bundle'), json.dumps(address_bundle))
+    _set_cache(_as_detail_key('local_authority_eng'), json.dumps(local_authority_eng))
+    _set_cache(_as_detail_key('company'), json.dumps(company))
+    _set_cache(_as_detail_key('company_address_bundle'), json.dumps(company_address_bundle))
+    _set_cache(_as_detail_key('industry'), json.dumps(industry))
+    _set_cache(_as_detail_key('food_authority'), json.dumps(food_authority))
 
     return resp
