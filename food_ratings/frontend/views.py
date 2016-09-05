@@ -63,14 +63,15 @@ def _entry(register, key):
 def _entry_async(register, key, session):
     register = _config(register, 'register')
     url = "%s/record/%s.json" % (register, key)
-    current_app.logger.info("ASYNC GET: " + url)
+    current_app.logger.info("ASYNC REQUEST: " + url)
     return session.get(url)
 
 def _unpack_async(async_entry):
     if isinstance(async_entry, Future):
-        result = async_entry.result().json()
-        current_app.logger.info("ASYNC result: " + json.dumps(result))
-        return result
+        response = async_entry.result()
+        current_app.logger.info("GET ASYNC: %s [%s] %s" % (response.url, response.status_code, response.text))
+
+        return response.json()
     else:
         return async_entry
 
