@@ -146,7 +146,7 @@ def search():
                 result['ratings'] = ratings
                 result['rating'] = ratings[0]
 
-        def _resolve_address_level(result, addr_level_key, next_level_key=None):
+        def _resolve_address_level(results, addr_level_key, next_level_key=None):
             for result in results:
                 address_part = _unpack_async(result.get('address_bundle').get(addr_level_key))
                 result['address_bundle'][addr_level_key] = address_part
@@ -155,9 +155,9 @@ def search():
                     result['address_bundle'][next_level_key] = _entry_async(next_level_key, address_part[next_level_key], session) if address_part and next_level_key in address_part else None
 
 
-        _resolve_address_level(result, 'address', 'street')
-        _resolve_address_level(result, 'street', 'place')
-        _resolve_address_level(result, 'place')
+        _resolve_address_level(results, 'address', 'street')
+        _resolve_address_level(results, 'street', 'place')
+        _resolve_address_level(results, 'place')
 
         _set_cache('search_results', json.dumps(results))
 
