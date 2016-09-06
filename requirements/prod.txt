@@ -5,3 +5,5 @@ gunicorn
 requests
 redis
 requests-cache
+requests_futures
+Flask-Cache
