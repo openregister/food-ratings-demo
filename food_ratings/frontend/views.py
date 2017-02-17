@@ -23,6 +23,86 @@ import food_ratings.frontend.caching as caching
 
 frontend = Blueprint('frontend', __name__, template_folder='templates')
 
+HARDCODED_PREMISES = [
+  {
+    "name": "Byron",
+    "business": "company:07228130",
+    "premises": "14445100000",
+    "food-premises-types": [
+      "Restaurant;Cafe;Canteen"
+    ],
+    "local-authority": "506",
+    "food-premises": "516226"
+  },
+  {
+    "name": "Byron",
+    "business": "company:07228130",
+    "premises": "15662079000",
+    "local-authority": "506",
+    "food-premises": "759332"
+  },
+  {
+    "name": "Byron",
+    "business": "company:07228130",
+    "premises": "15610045000",
+    "food-premises-types": [
+      "Restaurant;Cafe;Canteen"
+    ],
+    "local-authority": "506",
+    "food-premises": "785709"
+  }
+]
+
+HARDCODED_RATING = {
+    "785709":[
+        {
+            "food-premises-rating-value": "4",
+            "food-premises-rating-structural-score": "5",
+            "food-premises-rating-hygiene-score": "5",
+            "food-premises-rating": "7857092015-07-21",
+            "food-premises": "785709",
+            "food-premises-rating-confidence-in-management-score": "10",
+            "inspector": "local-authority:506",
+            "start-date": "2015-07-21"
+        }
+    ],
+    "759332": [
+        {
+            "food-premises-rating-value": "1",
+            "food-premises-rating-structural-score": "15",
+            "food-premises-rating-hygiene-score": "15",
+            "food-premises-rating": "7593322015-08-27",
+            "food-premises": "759332",
+            "food-premises-rating-confidence-in-management-score": "20",
+            "food-premises-rating-reply": "I agree with the inspection results but have since carried out the following improvements:\\n There is a new manager and/or new staff\\n The staff have been trained/retrained/given instruction/are under revised supervisory arrangements\\n The points raised by the Environmental Health Officers were acted upon immediately and we look forward to welcoming them back for a re-inspection when we will be delighted to demonstrate our high standards at this restaurant.\\n The conditions found at the time of the inspection were not typical of the normal conditions mainained at the establishment and arose because:\\n Historically, cooking temperature records were available. However, on the day of the inspection this was not the case.\\n",
+            "start-date": "2015-08-27",
+            "inspector": "local-authority:506"
+        },
+        {
+            "food-premises-rating-value": "4",
+            "food-premises-rating-structural-score": "10",
+            "food-premises-rating-hygiene-score": "5",
+            "food-premises-rating": "7593322014-04-09",
+            "food-premises": "759332",
+            "food-premises-rating-confidence-in-management-score": "5",
+            "inspector": "local-authority:506",
+            "start-date": "2014-04-09"
+        }
+    ],
+    "516226": [
+        {
+            "food-premises-rating-value": "5",
+            "food-premises-rating-structural-score": "5",
+            "food-premises-rating-hygiene-score": "5",
+            "food-premises-rating": "5162262015-07-22",
+            "food-premises": "516226",
+            "food-premises-rating-confidence-in-management-score": "5",
+            "inspector": "local-authority:506",
+            "start-date": "2015-07-22"
+        }
+    ]
+}
+
 def _config(name, suffix):
     var = '%s_%s' % (name, suffix)
     var = var.upper().replace('-', '_')
@@ -33,26 +113,6 @@ def _get(url, params=None):
     response = requests.get(url, params=params)
     current_app.logger.info("GET: %s [%s] %s" % (response.url, response.status_code, response.text))
     return response
-
-# search index has '_' instead of '-' in field names ..
-def _index(index, field, value, sortby=''):
-    url = _config(index, 'search_url')
-    params = {
-        "q": value,
-        "q.options": "{fields:['%s']}" % (field.replace('-', '_'))
-    }
-
-    if sortby:
-        params['sort'] = '%s desc' % (sortby.replace('-', '_'))
-
-    response = _get(url, params=params)
-    results = [hit['fields'] for hit in response.json()['hits']['hit']]
-
-    for result in results:
-        for key in result:
-            result[key.replace('_', '-')] = result.pop(key)
-
-    return results
 
 
 def _entry(register, key):
@@ -92,6 +152,7 @@ def _set_cache(cache_key, value):
         current_app.logger.warn(e)
 
 def _get_data_from_cache(cache_key):
+    return None
     data = None
     raw_data = current_app.cache.get(cache_key)
     if raw_data:
@@ -134,7 +195,7 @@ def search():
     results = _get_data_from_cache('search_results')
 
     if not results:
-        results = _index('food-premises', 'name', name)
+        results = HARDCODED_PREMISES
 
         for result in results:
             premises = _entry('premises', result['premises'])
@@ -142,7 +203,7 @@ def search():
                 'address': _entry_async('address', premises['address'], session)
             }
 
-            ratings = _index('food-premises-rating', 'food-premises', result['food-premises'], 'start-date')
+            ratings = HARDCODED_RATING[result['food-premises']]
             if ratings:
                 result['ratings'] = ratings
                 result['rating'] = ratings[0]
@@ -193,7 +254,7 @@ def rating(food_premises_rating):
     organisation = food_authority['organisation']
     local_authority_eng = _get_data('local_authority_eng', 'local-authority-eng', organisation.split(':')[1], use_async=True)
 
-    ratings = _get_data_from_cache(_as_detail_key('ratings')) or _index('food-premises-rating', 'food-premises', food_premises['food-premises'])
+    ratings = HARDCODED_RATING[food_premises['food-premises']]
     company_address_bundle = _get_data_from_cache(_as_detail_key('company_address_bundle')) or _address_bundle(company['address'])
 
     premises = _unpack_async(premises)
