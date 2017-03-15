@@ -1,10 +1,11 @@
 ---
 # all applications use these settings and services
 memory: 512M
-instances: 1
+instances: 2
 applications:
-- name: food-ratings-demo
+- name: openregister-food-ratings-demo
   path: .
+  buildpack: python_buildpack
   timeout: 180
   env:
     SETTINGS: 'config.DevelopmentConfig'
