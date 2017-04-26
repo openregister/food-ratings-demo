@@ -103,6 +103,7 @@ HARDCODED_RATING = {
     ]
 }
 
+
 def _config(name, suffix):
     var = '%s_%s' % (name, suffix)
     var = var.upper().replace('-', '_')
@@ -120,11 +121,13 @@ def _entry(register, key):
     response = _get('%s/record/%s.json' % (url, key))
     return response.json()
 
+
 def _entry_async(register, key, session):
     register = _config(register, 'register')
     url = "%s/record/%s.json" % (register, key)
     current_app.logger.info("ASYNC REQUEST: " + url)
     return session.get(url)
+
 
 def _unpack_async(async_entry):
     if isinstance(async_entry, Future):
@@ -135,21 +138,25 @@ def _unpack_async(async_entry):
     else:
         return async_entry
 
+
 def _address_bundle(address):
     address = _entry('address', address)
-    address_street = _entry('street', address['street']) if address and 'street' in address else None
-    address_street_place = _entry('place', address_street['place']) if address_street and 'place' in address_street else None
+    address_street = _entry('street', _single_item(address)['street']) if address and 'street' in _single_item(address) else None
+    address_street_place = _entry('place',
+                                  _single_item(address_street)['place']) if address_street and 'place' in _single_item(address_street) else None
     return {
-        "address": address,
-        "street": address_street,
-        "place": address_street_place
+        "address": _single_item(address),
+        "street": _single_item(address_street),
+        "place": _single_item(address_street_place)
     }
+
 
 def _set_cache(cache_key, value):
     try:
         current_app.cache.set(cache_key, value)
     except Exception as e:
         current_app.logger.warn(e)
+
 
 def _get_data_from_cache(cache_key):
     return None
@@ -161,6 +168,17 @@ def _get_data_from_cache(cache_key):
         except Exception as e:
             current_app.logger.info("Json could not parse '%s' cache: %s" % (raw_data, e.message))
     return data
+
+
+def _single_item(record_dict):
+    if record_dict is None:
+        return record_dict
+    items = [record['item'][0] for record in record_dict.values() if 'item' in record]
+    if len(items) != 1:
+        raise Exception.new("Record did not contain a single item: " + str(record_dict))
+    return items[0]
+
+
 
 @frontend.route('/', methods=['GET', 'POST'])
 def index():
@@ -180,11 +198,13 @@ def index():
 
     return resp
 
+
 @frontend.route('/clear-cache')
 def clear_cache():
     message = "Cache cleared: " + str(caching.clear_cache(current_app))
     current_app.logger.info(message)
     return message
+
 
 @frontend.route('/search')
 def search():
@@ -198,9 +218,11 @@ def search():
         results = HARDCODED_PREMISES
 
         for result in results:
-            premises = _entry('premises', result['premises'])
+            premises_key = result['premises']
+            premises = _entry('premises', premises_key)
+            address_key = _single_item(premises)['address']
             result['address_bundle'] = {
-                'address': _entry_async('address', premises['address'], session)
+                'address': _entry_async('address', address_key, session)
             }
 
             ratings = HARDCODED_RATING[result['food-premises']]
@@ -210,12 +232,13 @@ def search():
 
         def _resolve_address_level(results, addr_level_key, next_level_key=None):
             for result in results:
-                address_part = _unpack_async(result.get('address_bundle').get(addr_level_key))
+                address_part = _single_item(_unpack_async(result.get('address_bundle').get(addr_level_key)))
                 result['address_bundle'][addr_level_key] = address_part
 
                 if next_level_key:
-                    result['address_bundle'][next_level_key] = _entry_async(next_level_key, address_part[next_level_key], session) if address_part and next_level_key in address_part else None
-
+                    result['address_bundle'][next_level_key] = _entry_async(next_level_key,
+                                                                            address_part[next_level_key],
+                                                                            session) if address_part and next_level_key in address_part else None
 
         _resolve_address_level(results, 'address', 'street')
         _resolve_address_level(results, 'street', 'place')
@@ -223,9 +246,9 @@ def search():
 
         _set_cache('search_results', json.dumps(results))
 
-
     results = sorted(results, key=lambda x: x.get('food-premises'))
     return render_template('results.html', form=form, results=results)
+
 
 @frontend.route('/rating/<food_premises_rating>')
 def rating(food_premises_rating):
@@ -243,38 +266,40 @@ def rating(food_premises_rating):
     session = FuturesSession(max_workers=10)
 
     rating = _get_data('food_premises_rating', 'food-premises-rating', food_premises_rating)
-    food_premises = _get_data('food_premises', 'food-premises', rating['food-premises'])
-    premises = _get_data('premises', 'premises', food_premises['premises'], use_async=True)
+    food_premises = _get_data('food_premises', 'food-premises', _single_item(rating)['food-premises'])
+    premises = _get_data('premises', 'premises', _single_item(food_premises)['premises'], use_async=True)
 
-    company_number = food_premises['business']
+    company_number = _single_item(food_premises)['business']
     company = _get_data('company', 'company', company_number.split(':')[1])
-    industry = _get_data('industry', 'industry', company['industry'], use_async=True)
+    industry = _get_data('industry', 'industry', _single_item(company)['industry'], use_async=True)
 
-    food_authority = _get_data('food_authority', 'food-authority', food_premises['food-authority'])
-    organisation = food_authority['organisation']
-    local_authority_eng = _get_data('local_authority_eng', 'local-authority-eng', organisation.split(':')[1], use_async=True)
+    food_authority = _get_data('food_authority', 'food-authority', _single_item(food_premises)['food-authority'])
+    organisation = _single_item(food_authority)['organisation']
+    local_authority_eng = _get_data('local_authority_eng', 'local-authority-eng', organisation.split(':')[1],
+                                    use_async=True)
 
-    ratings = HARDCODED_RATING[food_premises['food-premises']]
-    company_address_bundle = _get_data_from_cache(_as_detail_key('company_address_bundle')) or _address_bundle(company['address'])
+    ratings = HARDCODED_RATING[_single_item(food_premises)['food-premises']]
+    company_address_bundle = _get_data_from_cache(_as_detail_key('company_address_bundle')) or _address_bundle(
+        _single_item(company)['address'])
 
     premises = _unpack_async(premises)
-    address_bundle = _get_data_from_cache(_as_detail_key('address_bundle')) or _address_bundle(premises['address'])
+    address_bundle = _get_data_from_cache(_as_detail_key('address_bundle')) or _address_bundle(_single_item(premises)['address'])
 
     industry = _unpack_async(industry)
     local_authority_eng = _unpack_async(local_authority_eng)
     rating = _unpack_async(rating)
 
     resp = make_response(render_template('rating.html',
-        rating=rating,
-        ratings=ratings,
-        food_premises=food_premises,
-        premises=premises,
-        address_bundle=address_bundle,
-        local_authority_eng=local_authority_eng,
-        company=company,
-        company_address_bundle=company_address_bundle,
-        industry=industry,
-        food_authority=food_authority))
+                                         rating=_single_item(rating),
+                                         ratings=ratings,
+                                         food_premises=_single_item(food_premises),
+                                         premises=_single_item(premises),
+                                         address_bundle=address_bundle,
+                                         local_authority_eng=_single_item(local_authority_eng),
+                                         company=_single_item(company),
+                                         company_address_bundle=company_address_bundle,
+                                         industry=_single_item(industry),
+                                         food_authority=_single_item(food_authority)))
 
     _set_cache(_as_detail_key('food_premises_rating'), json.dumps(rating))
     _set_cache(_as_detail_key('ratings'), json.dumps(ratings))
