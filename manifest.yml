@@ -14,7 +14,7 @@ applications:
     ADDRESS_REGISTER: 'http://address.discovery.openregister.org'
     STREET_REGISTER: 'http://street.discovery.openregister.org'
     PLACE_REGISTER: 'http://place.discovery.openregister.org'
-    INDUSTRY_REGISTER: 'http://industry.discovery.openregister.org'
+    INDUSTRIAL_CLASSIFICATION_REGISTER: 'http://industrial-classification.discovery.openregister.org'
     FOOD_PREMISES_REGISTER: 'http://food-premises.discovery.openregister.org'
     LOCAL_AUTHORITY_ENG_REGISTER: 'http://local-authority-eng.discovery.openregister.org'
     FOOD_AUTHORITY_REGISTER: 'http://food-authority.discovery.openregister.org'
