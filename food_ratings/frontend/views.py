@@ -271,7 +271,7 @@ def rating(food_premises_rating):
 
     company_number = _single_item(food_premises)['business']
     company = _get_data('company', 'company', company_number.split(':')[1])
-    industry = _get_data('industry', 'industry', _single_item(company)['industry'], use_async=True)
+    industrial_classification = _get_data('industrial-classification', 'industrial-classification', _single_item(company)['industrial-classification'], use_async=True)
 
     food_authority = _get_data('food_authority', 'food-authority', _single_item(food_premises)['food-authority'])
     organisation = _single_item(food_authority)['organisation']
@@ -285,7 +285,7 @@ def rating(food_premises_rating):
     premises = _unpack_async(premises)
     address_bundle = _get_data_from_cache(_as_detail_key('address_bundle')) or _address_bundle(_single_item(premises)['address'])
 
-    industry = _unpack_async(industry)
+    industrial_classification = _unpack_async(industrial_classification)
     local_authority_eng = _unpack_async(local_authority_eng)
     rating = _unpack_async(rating)
 
@@ -298,7 +298,7 @@ def rating(food_premises_rating):
                                          local_authority_eng=_single_item(local_authority_eng),
                                          company=_single_item(company),
                                          company_address_bundle=company_address_bundle,
-                                         industry=_single_item(industry),
+                                         industrial_classification=_single_item(industrial_classification),
                                          food_authority=_single_item(food_authority)))
 
     _set_cache(_as_detail_key('food_premises_rating'), json.dumps(rating))
@@ -309,7 +309,7 @@ def rating(food_premises_rating):
     _set_cache(_as_detail_key('local_authority_eng'), json.dumps(local_authority_eng))
     _set_cache(_as_detail_key('company'), json.dumps(company))
     _set_cache(_as_detail_key('company_address_bundle'), json.dumps(company_address_bundle))
-    _set_cache(_as_detail_key('industry'), json.dumps(industry))
+    _set_cache(_as_detail_key('industrial_classification'), json.dumps(industrial_classification))
     _set_cache(_as_detail_key('food_authority'), json.dumps(food_authority))
 
     return resp

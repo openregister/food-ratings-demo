@@ -80,8 +80,8 @@
           <dt>Registered office</dt>
           <dd>{{ company_address_bundle | format_address }}</dd>
 
-          <dt>Industry</dt>
-          <dd>{{ industry['industry'] }} — {{ industry['name'] }}</dd>
+          <dt>Industrial classification</dt>
+          <dd>{{ industrial_classification['industrial-classification'] }} — {{ industrial_classification['name'] }}</dd>
         </dl>
 
 
@@ -145,7 +145,7 @@
               {{ macros.register_item_info('company', company) }}
 
               <h3>Office for National Statistics</h3>
-              {{ macros.register_item_info('industry', industry) }}
+              {{ macros.register_item_info('industrial-classification', industrial_classification) }}
               
               <h3>Ordnance Survey</h3>
               {{ macros.register_item_info('address', address_bundle.get('address')) }}
